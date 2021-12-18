@@ -8,13 +8,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @NoArgsConstructor
-@Document
+@Document("categories")
 public class Category {
     @Id
     private ObjectId id;
-    private String name;
+    private CategoryEnum name;
 
-    public Category(String name) {
+    public Category(CategoryEnum name) {
         this.name = name;
     }
 }

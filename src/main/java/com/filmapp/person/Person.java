@@ -1,7 +1,7 @@
 package com.filmapp.person;
 
 import com.filmapp.film.Film;
-import com.filmapp.role.person.RolePerson;
+import com.filmapp.role.person.PersonRole;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
@@ -14,7 +14,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-@Document
+@Document("persons")
 public class Person {
     @Id
     private ObjectId id;
@@ -23,7 +23,7 @@ public class Person {
     private LocalDate birthDate;
     //private String nationality;
     @DBRef
-    private RolePerson rolePerson;
+    private PersonRole personRole;
     @DBRef
     private List<Film> films;
 

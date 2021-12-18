@@ -8,13 +8,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @NoArgsConstructor
-@Document()
-public class RolePerson {
+@Document("person-roles")
+public class PersonRole {
     @Id
     private ObjectId id;
-    private String name;
+    private PersonRoleEnum role;
 
-    public RolePerson(String name) {
-        this.name = name;
+    public PersonRole(PersonRoleEnum role) {
+        this.role = role;
     }
 }
