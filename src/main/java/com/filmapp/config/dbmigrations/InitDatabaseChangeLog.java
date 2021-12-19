@@ -6,6 +6,9 @@ import com.filmapp.category.CategoryRepository;
 import com.filmapp.role.person.PersonRole;
 import com.filmapp.role.person.PersonRoleEnum;
 import com.filmapp.role.person.PersonRoleRepository;
+import com.filmapp.role.user.UserRole;
+import com.filmapp.role.user.UserRoleEnum;
+import com.filmapp.role.user.UserRoleRepository;
 import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
 
@@ -36,5 +39,14 @@ public class InitDatabaseChangeLog {
                 new PersonRole(PersonRoleEnum.DIRECTOR)
         );
         personRoleRepository.saveAll(personRoles);
+    }
+
+    @ChangeSet(order = "003", id = "initRolesUser", author = "admin")
+    public void initUserRoles(UserRoleRepository userRoleRepository) {
+        List<UserRole> userRoles = Arrays.asList(
+                new UserRole(UserRoleEnum.ROLE_ADMIN),
+                new UserRole(UserRoleEnum.ROLE_USER)
+        );
+        userRoleRepository.saveAll(userRoles);
     }
 }
