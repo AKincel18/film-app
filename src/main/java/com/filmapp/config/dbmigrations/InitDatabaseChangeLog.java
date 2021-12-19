@@ -30,7 +30,7 @@ public class InitDatabaseChangeLog {
     }
 
     @ChangeSet(order = "002", id = "initRolesPerson", author = "admin")
-    public void initRolesPerson(PersonRoleRepository personRoleRepository) {
+    public void initPersonRoles(PersonRoleRepository personRoleRepository) {
         List<PersonRole> personRoles = Arrays.asList(
                 new PersonRole(PersonRoleEnum.ACTOR),
                 new PersonRole(PersonRoleEnum.DIRECTOR)

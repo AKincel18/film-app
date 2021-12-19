@@ -12,9 +12,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class PersonRole {
     @Id
     private ObjectId id;
-    private PersonRoleEnum role;
+    private PersonRoleEnum name;
 
-    public PersonRole(PersonRoleEnum role) {
-        this.role = role;
+    public PersonRole(PersonRoleEnum name) {
+        this.name = name;
     }
 }
