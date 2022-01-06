@@ -3,6 +3,7 @@ package com.filmapp.category;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -22,18 +23,21 @@ public class CategoryController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     ResponseEntity<Category> createCategory(@RequestBody Category categoryToCreate) {
         Category createdCategory = categoryRepository.save(categoryToCreate);
         return ResponseEntity.created(URI.create("/" + createdCategory.getId())).body(createdCategory);
     }
 
     @PutMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     ResponseEntity<Category> updateCategory(@RequestBody Category categoryToUpdate) {
         Category updatedCategory = categoryRepository.save(categoryToUpdate);
         return ResponseEntity.created(URI.create("/" + updatedCategory.getId())).body(updatedCategory);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     ResponseEntity<List<Category>> deleteCategory(@PathVariable ObjectId id) {
         Optional<Category> categoryToDelete = categoryRepository.findById(id);
         if (categoryToDelete.isEmpty()) {

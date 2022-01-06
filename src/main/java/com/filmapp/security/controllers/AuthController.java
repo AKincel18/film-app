@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import static com.filmapp.security.consts.Message.*;
+
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -37,7 +39,7 @@ public class AuthController {
     private final UserRoleService userRoleService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -59,23 +61,23 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
+                    .body(new MessageResponse(USERNAME_EXISTS));
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
+                    .body(new MessageResponse(EMAIL_EXISTS));
         }
         UserRole userRole = userRoleService.findUserRole(signUpRequest.getRole());
         if (userRole == null) {
             ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Role does not exist!"));
+                    .body(new MessageResponse(ROLE_NOT_EXIST));
         }
 
         // Create new user's account
@@ -85,6 +87,6 @@ public class AuthController {
                 userRole);
         userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return ResponseEntity.ok(new MessageResponse(REGISTERED_SUCCESSFULLY));
     }
 }
