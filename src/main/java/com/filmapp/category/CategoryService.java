@@ -1,6 +1,7 @@
 package com.filmapp.category;
 
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -34,5 +35,14 @@ public class CategoryService {
         if (categoryToUpdate.isEmpty())
             return null;
         return saveCategory(categoryDto);
+    }
+
+    public boolean deleteCategory(ObjectId id) {
+        Optional<Category> categoryToDelete = categoryRepository.findById(id);
+        if (categoryToDelete.isEmpty()) {
+            return false;
+        }
+        categoryRepository.delete(categoryToDelete.get());
+        return true;
     }
 }

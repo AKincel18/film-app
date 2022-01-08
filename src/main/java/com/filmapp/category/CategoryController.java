@@ -7,17 +7,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/categories")
 public class CategoryController {
 
-    private final CategoryRepository categoryRepository;
     private final CategoryService categoryService;
 
-    public CategoryController(CategoryRepository categoryRepository, CategoryService categoryService) {
-        this.categoryRepository = categoryRepository;
+    public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
@@ -45,11 +42,7 @@ public class CategoryController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
     ResponseEntity<List<CategoryDto>> deleteCategory(@PathVariable ObjectId id) {
-        Optional<Category> categoryToDelete = categoryRepository.findById(id);
-        if (categoryToDelete.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        categoryRepository.delete(categoryToDelete.get());
-        return ResponseEntity.ok().body(getAllCategories());
+        boolean isDeleted = categoryService.deleteCategory(id);
+        return isDeleted ? ResponseEntity.ok().body(getAllCategories()) : ResponseEntity.notFound().build();
     }
 }
