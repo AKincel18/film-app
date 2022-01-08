@@ -22,12 +22,12 @@ public class InitDatabaseChangeLog {
     @ChangeSet(order = "001", id = "initCategories", author = "admin")
     public void initCategories(CategoryRepository categoryRepository) {
         List<Category> categories = Arrays.asList(
-                new Category(CategoryEnum.COMEDY),
-                new Category(CategoryEnum.THRILLER),
-                new Category(CategoryEnum.FANTASY),
-                new Category(CategoryEnum.ACTION),
-                new Category(CategoryEnum.ROMANCE),
-                new Category(CategoryEnum.WESTERN)
+                new Category(CategoryEnum.COMEDY.getName()),
+                new Category(CategoryEnum.THRILLER.getName()),
+                new Category(CategoryEnum.FANTASY.getName()),
+                new Category(CategoryEnum.ACTION.getName()),
+                new Category(CategoryEnum.ROMANCE.getName()),
+                new Category(CategoryEnum.WESTERN.getName())
         );
         categoryRepository.saveAll(categories);
     }
