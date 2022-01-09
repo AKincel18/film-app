@@ -12,6 +12,6 @@ public class AddedModeratorRoleChangeLog {
 
     @ChangeSet(order = "004", id = "addedModeratorRole", author = "admin")
     public void addedModeratorRole(UserRoleRepository repository) {
-        repository.save(new UserRole(UserRoleEnum.ROLE_MODERATOR));
+        repository.save(new UserRole(UserRoleEnum.ROLE_MODERATOR.name()));
     }
 }
