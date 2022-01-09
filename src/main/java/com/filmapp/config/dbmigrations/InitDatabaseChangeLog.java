@@ -35,8 +35,8 @@ public class InitDatabaseChangeLog {
     @ChangeSet(order = "002", id = "initRolesPerson", author = "admin")
     public void initPersonRoles(PersonRoleRepository personRoleRepository) {
         List<PersonRole> personRoles = Arrays.asList(
-                new PersonRole(PersonRoleEnum.ACTOR),
-                new PersonRole(PersonRoleEnum.DIRECTOR)
+                new PersonRole(PersonRoleEnum.ACTOR.getName()),
+                new PersonRole(PersonRoleEnum.DIRECTOR.getName())
         );
         personRoleRepository.saveAll(personRoles);
     }

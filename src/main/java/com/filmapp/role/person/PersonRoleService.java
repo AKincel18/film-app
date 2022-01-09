@@ -1,8 +1,8 @@
-package com.filmapp.category;
+package com.filmapp.role.person;
 
 import com.filmapp.generic.GenericServiceImpl;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CategoryService extends GenericServiceImpl<Category> {
+public class PersonRoleService extends GenericServiceImpl<PersonRole> {
 }

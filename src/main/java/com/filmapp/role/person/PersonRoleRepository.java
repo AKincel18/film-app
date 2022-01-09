@@ -1,10 +1,8 @@
 package com.filmapp.role.person;
 
-import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import com.filmapp.generic.GenericRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PersonRoleRepository extends MongoRepository<PersonRole, ObjectId> {
-
+public interface PersonRoleRepository extends GenericRepository<PersonRole> {
 }

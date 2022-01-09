@@ -1,24 +1,18 @@
 package com.filmapp.category;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.filmapp.generic.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Document("categories")
-public class Category {
-    @Id
-    @JsonSerialize(using = ToStringSerializer.class)
-    private ObjectId id;
-
-    private String name;
+public class Category extends BaseEntity {
 
     public Category(String name) {
-        this.name = name;
+        super(name);
     }
 }
