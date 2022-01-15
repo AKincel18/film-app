@@ -19,11 +19,12 @@ public class Film {
     @Id
     private ObjectId id;
     private String name;
-    private Person person;
+    private Person director;
     private LocalDate releaseDate;
     private Integer runningTime;
     private Double budget;
     @DBRef
     private List<Person> actors;
+    @DBRef
     private Category category;
 }

@@ -22,12 +22,12 @@ public class InitDatabaseChangeLog {
     @ChangeSet(order = "001", id = "initCategories", author = "admin")
     public void initCategories(CategoryRepository categoryRepository) {
         List<Category> categories = Arrays.asList(
-                new Category(CategoryEnum.COMEDY),
-                new Category(CategoryEnum.THRILLER),
-                new Category(CategoryEnum.FANTASY),
-                new Category(CategoryEnum.ACTION),
-                new Category(CategoryEnum.ROMANCE),
-                new Category(CategoryEnum.WESTERN)
+                new Category(CategoryEnum.COMEDY.getName()),
+                new Category(CategoryEnum.THRILLER.getName()),
+                new Category(CategoryEnum.FANTASY.getName()),
+                new Category(CategoryEnum.ACTION.getName()),
+                new Category(CategoryEnum.ROMANCE.getName()),
+                new Category(CategoryEnum.WESTERN.getName())
         );
         categoryRepository.saveAll(categories);
     }
@@ -35,8 +35,8 @@ public class InitDatabaseChangeLog {
     @ChangeSet(order = "002", id = "initRolesPerson", author = "admin")
     public void initPersonRoles(PersonRoleRepository personRoleRepository) {
         List<PersonRole> personRoles = Arrays.asList(
-                new PersonRole(PersonRoleEnum.ACTOR),
-                new PersonRole(PersonRoleEnum.DIRECTOR)
+                new PersonRole(PersonRoleEnum.ACTOR.getName()),
+                new PersonRole(PersonRoleEnum.DIRECTOR.getName())
         );
         personRoleRepository.saveAll(personRoles);
     }
@@ -44,8 +44,8 @@ public class InitDatabaseChangeLog {
     @ChangeSet(order = "003", id = "initRolesUser", author = "admin")
     public void initUserRoles(UserRoleRepository userRoleRepository) {
         List<UserRole> userRoles = Arrays.asList(
-                new UserRole(UserRoleEnum.ROLE_ADMIN),
-                new UserRole(UserRoleEnum.ROLE_USER)
+                new UserRole(UserRoleEnum.ROLE_ADMIN.name()),
+                new UserRole(UserRoleEnum.ROLE_USER.name())
         );
         userRoleRepository.saveAll(userRoles);
     }

@@ -23,8 +23,9 @@ public class UserDto implements UserDetails {
 
 
     public static UserDto build(User user) {
-        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getName().name());
-        return new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(), user.getRole().getName(), authority);
+        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getName());
+        return new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(),
+                UserRoleEnum.valueOf(user.getRole().getName()), authority);
     }
 
     @Override
