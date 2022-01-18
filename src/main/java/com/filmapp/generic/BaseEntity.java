@@ -12,9 +12,9 @@ import org.springframework.data.annotation.Id;
 public class BaseEntity {
     @Id
     @JsonSerialize(using = ToStringSerializer.class)
-    private ObjectId id;
+    protected ObjectId id;
 
-    private String name;
+    protected String name;
 
     public BaseEntity(String name) {
         this.name = name;

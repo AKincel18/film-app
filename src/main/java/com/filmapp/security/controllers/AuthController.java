@@ -7,7 +7,7 @@ import com.filmapp.security.jwt.JwtUtils;
 import com.filmapp.security.payload.request.LoginRequest;
 import com.filmapp.security.payload.request.SignupRequest;
 import com.filmapp.security.payload.response.JwtResponse;
-import com.filmapp.security.payload.response.MessageResponse;
+import com.filmapp.response.MessageResponse;
 import com.filmapp.user.User;
 import com.filmapp.user.UserDto;
 import com.filmapp.user.UserRepository;
