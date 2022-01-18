@@ -1,13 +1,11 @@
 package com.filmapp.person;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.filmapp.film.Film;
-import com.filmapp.role.person.PersonRole;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
@@ -16,10 +14,9 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-@Document("persons")
-public class Person {
+public class PersonDto {
 
-    @Id
+    @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId id;
 
     @NotBlank
@@ -31,12 +28,6 @@ public class Person {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthDate;
 
-    //private String nationality;
-
-    @DBRef
-    private PersonRole role;
-
-    @DBRef
+    private String role;
     private List<Film> films;
-
 }

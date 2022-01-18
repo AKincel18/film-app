@@ -1,4 +1,4 @@
-package com.filmapp.security.payload.response;
+package com.filmapp.response;
 
 import lombok.Data;
 

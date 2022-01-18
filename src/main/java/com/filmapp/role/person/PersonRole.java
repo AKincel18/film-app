@@ -15,4 +15,12 @@ public class PersonRole extends BaseEntity {
     public PersonRole(String name) {
         super(name);
     }
+
+    @Override
+    public String toString() {
+        return "PersonRole{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
