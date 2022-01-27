@@ -1,6 +1,7 @@
 package com.filmapp.film;
 
 import com.filmapp.category.Category;
+import com.filmapp.exception.CategoryNotExistException;
 import com.filmapp.generic.GenericRepository;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
@@ -33,8 +34,11 @@ public class FilmService {
                 .collect(Collectors.toList());
     }
 
-    public FilmDto createFilm(FilmDto filmDto) {
-        Film film = filmRepository.save(mapper.map(filmDto, Film.class));
+    public FilmDto createFilm(FilmDto filmDto) throws CategoryNotExistException {
+        Category category = categoryRepository.getByName(filmDto.getCategory());
+        if (category == null)
+            throw new CategoryNotExistException();
+        Film film = filmRepository.save(mapper.map(category, filmDto, Film.class));
         return mapper.map(film, FilmDto.class);
     }
 

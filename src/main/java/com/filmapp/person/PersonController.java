@@ -20,6 +20,12 @@ public class PersonController {
         this.personService = personService;
     }
 
+    @GetMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    ResponseEntity<List<PersonDto>> findAllPersons() {
+        return ResponseEntity.ok(personService.findAllPersons());
+    }
+
     @PostMapping
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
     ResponseEntity<?> createPerson(@RequestBody PersonDto personDto) {

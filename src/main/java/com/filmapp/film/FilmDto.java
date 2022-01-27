@@ -2,8 +2,7 @@ package com.filmapp.film;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.filmapp.category.Category;
-import com.filmapp.person.Person;
+import com.filmapp.person.PersonDto;
 import lombok.Data;
 import org.bson.types.ObjectId;
 
@@ -17,10 +16,10 @@ public class FilmDto {
     private ObjectId id;
 
     private String name;
-    private Person director;
+    private PersonDto director;
     private LocalDate releaseDate;
     private Integer runningTime;
     private Double budget;
-    private List<Person> actors;
-    private Category category;
+    private List<PersonDto> actors;
+    private String category;
 }

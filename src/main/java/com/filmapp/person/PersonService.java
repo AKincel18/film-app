@@ -23,6 +23,13 @@ public class PersonService {
         this.mapper = new PersonMapper();
     }
 
+    public List<PersonDto> findAllPersons() {
+        return personRepository.findAll()
+                .stream()
+                .map(p -> mapper.map(p, PersonDto.class))
+                .collect(Collectors.toList());
+    }
+
     public PersonDto createPerson(PersonDto personDto) throws PersonRoleNotExistException {
         PersonRole personRole = personRoleRepository.getByName(personDto.getRole());
         if (personRole == null)

@@ -1,5 +1,7 @@
 package com.filmapp.film;
 
+import com.filmapp.exception.CategoryNotExistException;
+import com.filmapp.response.MessageResponse;
 import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +27,13 @@ public class FilmController {
     }
 
     @PostMapping
-    ResponseEntity<FilmDto> createFilm(@RequestBody FilmDto filmToCreateDto) {
-        FilmDto createdFilmDto = filmService.createFilm(filmToCreateDto);
+    ResponseEntity<?> createFilm(@RequestBody FilmDto filmToCreateDto) {
+        FilmDto createdFilmDto;
+        try {
+            createdFilmDto = filmService.createFilm(filmToCreateDto);
+        } catch (CategoryNotExistException e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
         return ResponseEntity.created(URI.create("/" + createdFilmDto.getId())).body(createdFilmDto);
     }
 
