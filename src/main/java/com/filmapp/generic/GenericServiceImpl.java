@@ -1,13 +1,12 @@
 package com.filmapp.generic;
 
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
+/*@Service
 public class GenericServiceImpl<Entity extends BaseEntity> implements GenericService<Entity> {
 
     @Autowired
@@ -24,13 +23,13 @@ public class GenericServiceImpl<Entity extends BaseEntity> implements GenericSer
     public Entity update(Entity entity) {
         if (entity == null)
             return null;
-        Optional<Entity> entityToUpdate = genericRepository.findById(entity.getId());
+        Optional<Entity> entityToUpdate = genericRepository.findById(1l);
         if (entityToUpdate.isEmpty())
             return null;
         return save(entity);
     }
 
-    public boolean delete(ObjectId id) {
+    public boolean delete(Long id) {
         Optional<Entity> entityToDelete = genericRepository.findById(id);
         if (entityToDelete.isEmpty()) {
             return false;
@@ -38,4 +37,4 @@ public class GenericServiceImpl<Entity extends BaseEntity> implements GenericSer
         genericRepository.delete(entityToDelete.get());
         return true;
     }
-}
+}*/

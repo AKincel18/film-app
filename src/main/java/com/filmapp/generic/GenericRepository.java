@@ -1,8 +1,7 @@
 package com.filmapp.generic;
 
-import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface GenericRepository<Entity extends BaseEntity> extends MongoRepository<Entity, ObjectId> {
-    Entity getByName(String name);
-}
+/*public interface GenericRepository<Entity extends BaseEntity> extends JpaRepository<Entity, Long> {
+    //Entity getByName(String name);
+}*/

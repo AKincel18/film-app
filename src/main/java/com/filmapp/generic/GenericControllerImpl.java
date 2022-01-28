@@ -1,6 +1,5 @@
 package com.filmapp.generic;
 
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -9,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
-public class GenericControllerImpl<Entity extends BaseEntity> implements GenericController<Entity> {
+/*public class GenericControllerImpl<Entity extends BaseEntity> implements GenericController<Entity> {
 
     @Autowired
     private GenericService<Entity> genericService;
@@ -23,7 +22,7 @@ public class GenericControllerImpl<Entity extends BaseEntity> implements Generic
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
     public ResponseEntity<Entity> create(@RequestBody Entity entityToCreate) {
         Entity entityCreated = genericService.save(entityToCreate);
-        return ResponseEntity.created(URI.create("/" + entityCreated.getId())).body(entityCreated);
+        return ResponseEntity.created(URI.create("/" + 1l)).body(entityCreated);
     }
 
     @PutMapping
@@ -32,13 +31,13 @@ public class GenericControllerImpl<Entity extends BaseEntity> implements Generic
         Entity updatedEntity = genericService.update(entityToUpdate);
         if (updatedEntity == null)
             return ResponseEntity.notFound().build();
-        return ResponseEntity.created(URI.create("/" + updatedEntity.getId())).body(updatedEntity);
+        return ResponseEntity.created(URI.create("/" + 1l)).body(updatedEntity);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
-    public ResponseEntity<List<Entity>> delete(@PathVariable ObjectId id) {
+    public ResponseEntity<List<Entity>> delete(@PathVariable Long id) {
         boolean isDeleted = genericService.delete(id);
         return isDeleted ? ResponseEntity.ok().body(getAll()) : ResponseEntity.notFound().build();
     }
-}
+}*/

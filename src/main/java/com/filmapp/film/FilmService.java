@@ -21,6 +21,6 @@ public class FilmService {
     }
 
     public Film createFilm(Film film) {
-        return filmRepository.insert(film);
+        return filmRepository.save(film);
     }
 }

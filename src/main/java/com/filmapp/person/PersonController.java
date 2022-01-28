@@ -2,7 +2,6 @@ package com.filmapp.person;
 
 import com.filmapp.exception.PersonRoleNotExistException;
 import com.filmapp.response.MessageResponse;
-import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +32,7 @@ public class PersonController {
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<PersonDto> getPersonById(@PathVariable ObjectId id) {
+    ResponseEntity<PersonDto> getPersonById(@PathVariable Long id) {
         PersonDto personDto = personService.findPersonById(id);
         if (personDto != null)
             return ResponseEntity.ok(personDto);
@@ -41,7 +40,7 @@ public class PersonController {
     }
 
     @GetMapping("/role/{id}")
-    ResponseEntity<List<PersonDto>> getByRole(@PathVariable ObjectId id) {
+    ResponseEntity<List<PersonDto>> getByRole(@PathVariable Long id) {
         List<PersonDto> persons = personService.findPersonsByRoleId(id);
         if (persons != null)
             return ResponseEntity.ok(persons);

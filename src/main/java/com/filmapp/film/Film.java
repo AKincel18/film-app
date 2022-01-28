@@ -4,27 +4,46 @@ import com.filmapp.category.Category;
 import com.filmapp.person.Person;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
-@Document("films")
+@Entity(name = "films")
 public class Film {
+
     @Id
-    private ObjectId id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column
+    private Long id;
+
+    @Column
     private String name;
-    private Person director;
+
+//    @OneToOne
+//    @JoinColumn(name = "person_id", referencedColumnName = "id")
+//    private Person director;
+
+    @Column(name = "release_date")
     private LocalDate releaseDate;
+
+    @Column(name = "running_time")
     private Integer runningTime;
+
+    @Column
     private Double budget;
-    @DBRef
-    private List<Person> actors;
-    @DBRef
+
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "films_persons",
+            joinColumns = {@JoinColumn(name = "film_id")},
+            inverseJoinColumns = {@JoinColumn(name = "person_id")}
+    )
+    private Set<Person> actors;
+
+    @OneToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 }

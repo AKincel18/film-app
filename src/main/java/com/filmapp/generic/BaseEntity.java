@@ -1,22 +1,15 @@
 package com.filmapp.generic;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
+
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
+@MappedSuperclass
 public class BaseEntity {
-    @Id
-    @JsonSerialize(using = ToStringSerializer.class)
-    protected ObjectId id;
 
+    @Column
     protected String name;
-
-    public BaseEntity(String name) {
-        this.name = name;
-    }
 }

@@ -1,18 +1,20 @@
 package com.filmapp.category;
 
-import com.filmapp.generic.BaseEntity;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@Document("categories")
-public class Category extends BaseEntity {
+@Entity(name = "categories")
+public class Category {
 
-    public Category(String name) {
-        super(name);
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CATEGORIES_GEN_SEQ")
+    @SequenceGenerator(name = "CATEGORIES_GEN_SEQ", sequenceName = "CATEGORIES_SEQ", allocationSize = 1)
+    private Long id;
+
+    @Enumerated(EnumType.STRING)
+    private CategoryEnum name;
 }
