@@ -34,8 +34,8 @@ public class Person {
 
     //private String nationality;
 
-//    @OneToOne(mappedBy = "film_id")
-//    private Film film;
+    @OneToOne(mappedBy = "director")
+    private Film film;
 
     @OneToOne
     @JoinColumn(name = "person_role_id", referencedColumnName = "id")

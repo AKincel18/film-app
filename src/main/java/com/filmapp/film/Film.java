@@ -22,9 +22,9 @@ public class Film {
     @Column
     private String name;
 
-//    @OneToOne
-//    @JoinColumn(name = "person_id", referencedColumnName = "id")
-//    private Person director;
+    @OneToOne
+    @JoinColumn(name = "director_id", referencedColumnName = "id")
+    private Person director;
 
     @Column(name = "release_date")
     private LocalDate releaseDate;
