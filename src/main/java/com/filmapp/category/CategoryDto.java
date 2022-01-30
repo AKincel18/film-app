@@ -3,11 +3,9 @@ package com.filmapp.category;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-
 @Data
 @NoArgsConstructor
-public class CategoryDto implements Serializable {
+public class CategoryDto {
     private Long id;
-    private CategoryEnum name;
+    private String name;
 }

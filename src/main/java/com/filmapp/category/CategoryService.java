@@ -1,5 +1,6 @@
 package com.filmapp.category;
 
+import com.filmapp.exception.CannotAddCategoryException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -25,19 +26,22 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    public CategoryDto save(CategoryDto categoryToCreate) {
+    public CategoryDto save(CategoryDto categoryToCreate) throws CannotAddCategoryException {
         Category category = mapper.map(categoryToCreate, Category.class);
+        if (category == null || category.getName() == null) {
+            throw new CannotAddCategoryException();
+        }
         Category savedCategory = categoryRepository.save(category);
         return mapper.map(savedCategory, CategoryDto.class);
     }
 
-    public CategoryDto update(CategoryDto categoryToUpdate) {
+    public CategoryDto update(CategoryDto categoryToUpdate) throws CannotAddCategoryException {
         if (categoryToUpdate == null)
-            return null;
-        return categoryRepository.findById(categoryToUpdate.getId())
-                .map(c -> save(mapper.map(c, CategoryDto.class)))
-                .orElse(null);
-
+            throw new CannotAddCategoryException();
+        Optional<Category> category = categoryRepository.findById(categoryToUpdate.getId());
+        if (category.isEmpty())
+            throw new CannotAddCategoryException();
+        return save(mapper.map(category.get(), CategoryDto.class));
     }
 
     public boolean delete(Long id) {
