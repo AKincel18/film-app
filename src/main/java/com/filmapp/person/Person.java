@@ -34,9 +34,6 @@ public class Person {
 
     //private String nationality;
 
-    @OneToOne(mappedBy = "director")
-    private Film film;
-
     @OneToOne
     @JoinColumn(name = "person_role_id", referencedColumnName = "id")
     private PersonRole role;
