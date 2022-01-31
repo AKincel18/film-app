@@ -1,6 +1,7 @@
 package com.filmapp.category;
 
 import com.filmapp.exception.CannotAddCategoryException;
+import com.filmapp.exception.CategoryNotExistException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -51,5 +52,12 @@ public class CategoryService {
 
         categoryRepository.delete(category.get());
         return true;
+    }
+
+    public Category findCategoryById(Long id) throws CategoryNotExistException {
+        Optional<Category> category = categoryRepository.findById(id);
+        if (category.isEmpty())
+            throw new CategoryNotExistException();
+        return category.get();
     }
 }

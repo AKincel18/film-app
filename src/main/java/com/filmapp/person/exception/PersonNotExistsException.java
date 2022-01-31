@@ -1,6 +1,8 @@
 package com.filmapp.person.exception;
 
-public class PersonNotExistsException extends Exception {
+import com.filmapp.commons.exception.NotExistException;
+
+public class PersonNotExistsException extends NotExistException {
 
     private static final String PERSON_NOT_EXIST = "Person does not exist";
 

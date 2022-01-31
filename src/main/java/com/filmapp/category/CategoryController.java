@@ -3,7 +3,6 @@ package com.filmapp.category;
 import com.filmapp.exception.CannotAddCategoryException;
 import com.filmapp.response.MessageResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -20,13 +19,13 @@ public class CategoryController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole({'ROLE_ADMIN', 'ROLE_MODERATOR'})")
+    //@PreAuthorize("hasAnyRole({'ROLE_ADMIN', 'ROLE_MODERATOR'})")
     public ResponseEntity<List<CategoryDto>> getAll() {
         return ResponseEntity.ok(categoryService.getAll());
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_MODERATOR')")
+    //@PreAuthorize("hasRole('ROLE_MODERATOR')")
     public ResponseEntity<?> create(@RequestBody CategoryDto categoryToCreate) {
         CategoryDto createdCategory;
         try {
@@ -38,7 +37,7 @@ public class CategoryController {
     }
 
     @PutMapping
-    @PreAuthorize("hasRole('ROLE_MODERATOR')")
+    //@PreAuthorize("hasRole('ROLE_MODERATOR')")
     public ResponseEntity<?> update(@RequestBody CategoryDto categoryToUpdate) {
         CategoryDto updatedCategory;
         try {
@@ -50,7 +49,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_MODERATOR')")
+    //@PreAuthorize("hasRole('ROLE_MODERATOR')")
     public ResponseEntity<List<CategoryDto>> delete(@PathVariable Long id) {
         boolean isDeleted = categoryService.delete(id);
         return isDeleted ? ResponseEntity.ok().body(categoryService.getAll()) : ResponseEntity.notFound().build();

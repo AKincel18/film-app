@@ -1,5 +1,6 @@
 package com.filmapp.person;
 
+import com.filmapp.commons.exception.NotExistException;
 import com.filmapp.exception.PersonRoleNotExistException;
 import com.filmapp.person.exception.PersonNotExistsException;
 import com.filmapp.person.payload.CreatePersonRequest;
@@ -40,7 +41,7 @@ public class PersonController {
         PersonDto updatedPerson;
         try {
             updatedPerson = personService.updatePerson(request);
-        } catch (PersonNotExistsException | PersonRoleNotExistException e) {
+        } catch (NotExistException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
         return ResponseEntity.ok(updatedPerson);
@@ -52,11 +53,14 @@ public class PersonController {
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<PersonDto> getPersonById(@PathVariable Long id) {
-        PersonDto personDto = personService.findPersonById(id);
-        if (personDto != null)
-            return ResponseEntity.ok(personDto);
-        return ResponseEntity.notFound().build();
+    ResponseEntity<?> getPersonById(@PathVariable Long id) {
+        PersonDto personDto;
+        try {
+            personDto = personService.findPersonDtoById(id);
+        } catch (PersonNotExistsException e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
+        return ResponseEntity.ok(personDto);
     }
 
     @GetMapping("/role/{id}")

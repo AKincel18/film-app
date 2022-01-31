@@ -1,10 +1,12 @@
 package com.filmapp.person;
 
+import com.filmapp.commons.exception.NotExistException;
 import com.filmapp.exception.PersonRoleNotExistException;
 import com.filmapp.person.exception.PersonNotExistsException;
 import com.filmapp.person.payload.CreatePersonRequest;
 import com.filmapp.person.payload.UpdatePersonRequest;
 import com.filmapp.role.person.PersonRole;
+import com.filmapp.role.person.PersonRoleEnum;
 import com.filmapp.role.person.PersonRoleService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -34,7 +36,7 @@ public class PersonService {
         return mapper.map(savedPerson, PersonDto.class);
     }
 
-    public PersonDto updatePerson(UpdatePersonRequest request) throws PersonNotExistsException, PersonRoleNotExistException {
+    public PersonDto updatePerson(UpdatePersonRequest request) throws NotExistException {
         if (request.getId() == null)
             throw new PersonNotExistsException();
         Optional<Person> personOptional = personRepository.findById(request.getId());
@@ -58,9 +60,16 @@ public class PersonService {
         return mapper.map(personRepository.save(person), PersonDto.class);
     }
 
-    public PersonDto findPersonById(Long id) {
+    public PersonDto findPersonDtoById(Long id) throws PersonNotExistsException {
+        return mapper.map(findPersonById(id), PersonDto.class);
+    }
+
+    public Person findPersonById(Long id) throws PersonNotExistsException{
         Optional<Person> person = personRepository.findById(id);
-        return person.map(p -> mapper.map(p, PersonDto.class)).orElse(null);
+        if (person.isEmpty()) {
+            throw new PersonNotExistsException();
+        }
+        return person.get();
     }
 
     public List<PersonDto> findPersonsByRoleId(Long roleId) throws PersonRoleNotExistException {
@@ -69,6 +78,13 @@ public class PersonService {
                 .stream()
                 .map(p -> mapper.map(p, PersonDto.class))
                 .collect(Collectors.toList());
+    }
+
+    public Person findDirectorById(Long id) throws PersonNotExistsException {
+        Optional<Person> person = personRepository.findPersonByIdAndRole_Role(id, PersonRoleEnum.DIRECTOR);
+        if (person.isEmpty())
+            throw new PersonNotExistsException();
+        return person.get();
     }
 
     public List<PersonDto> getAllPersons() {
