@@ -1,6 +1,6 @@
 package com.filmapp.category;
 
-import com.filmapp.exception.CannotAddCategoryException;
+import com.filmapp.category.exception.CannotAddCategoryException;
 import com.filmapp.response.MessageResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

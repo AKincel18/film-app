@@ -1,11 +1,11 @@
 package com.filmapp.person;
 
 import com.filmapp.commons.exception.NotExistException;
-import com.filmapp.exception.PersonRoleNotExistException;
 import com.filmapp.person.exception.PersonNotExistsException;
 import com.filmapp.person.payload.CreatePersonRequest;
 import com.filmapp.person.payload.UpdatePersonRequest;
 import com.filmapp.response.MessageResponse;
+import com.filmapp.role.person.exception.PersonRoleNotExistException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

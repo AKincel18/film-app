@@ -36,7 +36,7 @@ public class Person {
 
     @OneToOne
     @JoinColumn(name = "person_role_id", referencedColumnName = "id")
-    private PersonRole role;
+    private PersonRole personRole;
 
     @ManyToMany(mappedBy = "actors")
     private Set<Film> films;

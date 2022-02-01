@@ -1,6 +1,6 @@
 package com.filmapp.role.person;
 
-import com.filmapp.exception.PersonRoleNotExistException;
+import com.filmapp.role.person.exception.PersonRoleNotExistException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

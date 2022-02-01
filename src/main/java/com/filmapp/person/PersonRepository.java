@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PersonRepository extends JpaRepository<Person, Long> {
-    List<Person> findPeopleByRole(PersonRole role);
-    Optional<Person> findPersonByIdAndRole_Role(Long id, PersonRoleEnum role);
+    List<Person> findPeopleByPersonRole(PersonRole role);
+    Optional<Person> findPersonByIdAndPersonRole_Role(Long id, PersonRoleEnum role);
 }

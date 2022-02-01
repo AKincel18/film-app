@@ -1,11 +1,12 @@
 package com.filmapp.film;
 
+import com.filmapp.category.exception.CategoryNotExistException;
 import com.filmapp.commons.exception.NotExistException;
-import com.filmapp.exception.CategoryNotExistException;
 import com.filmapp.film.exception.FilmNotExistException;
 import com.filmapp.film.payload.CreateFilmRequest;
 import com.filmapp.film.payload.UpdateFilmRequest;
 import com.filmapp.response.MessageResponse;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +31,7 @@ public class FilmController {
     }
 
     @PostMapping
-    ResponseEntity<?> createFilm(@RequestBody @Valid CreateFilmRequest request) {
+    ResponseEntity<?> createFilm(@Valid @RequestBody CreateFilmRequest request) {
         FilmDto createdFilmDto;
         try {
             createdFilmDto = filmService.createFilm(request);
@@ -41,7 +42,7 @@ public class FilmController {
     }
 
     @PatchMapping
-    ResponseEntity<?> updateFilm(@RequestBody UpdateFilmRequest request) {
+    ResponseEntity<?> updateFilm(@RequestBody @Valid UpdateFilmRequest request) {
         FilmDto updatedFilm;
         try {
             updatedFilm = filmService.updateFilm(request);
@@ -79,17 +80,27 @@ public class FilmController {
         return ResponseEntity.ok(films);
     }
 
-    @PostMapping("/month")
+    @GetMapping("/month")
     ResponseEntity<List<FilmDto>> findFilmsByMonth(@RequestParam("year") int year,
                                                    @RequestParam("month") int month) {
         List<FilmDto> films = filmService.findFilmsByMonth(year, month);
         return ResponseEntity.ok(films);
     }
 
-    @PostMapping("/dates")
-    ResponseEntity<List<FilmDto>> findFilmsByDates(@RequestParam("dateFrom")LocalDate dateFrom,
-                                                   @RequestParam("dateTo")LocalDate dateTo) {
+    @GetMapping("/dates")
+    ResponseEntity<List<FilmDto>> findFilmsByDates(@RequestParam("dateFrom") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+                                                   @RequestParam("dateTo") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo) {
         List<FilmDto> films = filmService.findFilmsByDates(dateFrom, dateTo);
         return ResponseEntity.ok(films);
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<?> deleteFilm(@PathVariable Long id) {
+        try {
+            filmService.deleteFilm(id);
+        } catch (FilmNotExistException e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
+        return findAllFilms();
     }
 }

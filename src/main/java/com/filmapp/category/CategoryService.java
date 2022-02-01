@@ -1,7 +1,7 @@
 package com.filmapp.category;
 
-import com.filmapp.exception.CannotAddCategoryException;
-import com.filmapp.exception.CategoryNotExistException;
+import com.filmapp.category.exception.CannotAddCategoryException;
+import com.filmapp.category.exception.CategoryNotExistException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 

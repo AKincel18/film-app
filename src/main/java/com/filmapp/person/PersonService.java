@@ -1,13 +1,13 @@
 package com.filmapp.person;
 
 import com.filmapp.commons.exception.NotExistException;
-import com.filmapp.exception.PersonRoleNotExistException;
 import com.filmapp.person.exception.PersonNotExistsException;
 import com.filmapp.person.payload.CreatePersonRequest;
 import com.filmapp.person.payload.UpdatePersonRequest;
 import com.filmapp.role.person.PersonRole;
 import com.filmapp.role.person.PersonRoleEnum;
 import com.filmapp.role.person.PersonRoleService;
+import com.filmapp.role.person.exception.PersonRoleNotExistException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ public class PersonService {
     public PersonDto createPerson(CreatePersonRequest request) throws PersonRoleNotExistException {
         PersonRole personRole = personRoleService.findPersonRoleById(request.getRoleId());
         Person person = mapper.map(request, Person.class);
-        person.setRole(personRole);
+        person.setPersonRole(personRole);
         Person savedPerson = personRepository.save(person);
         return mapper.map(savedPerson, PersonDto.class);
     }
@@ -54,7 +54,7 @@ public class PersonService {
         }
         if (request.getRoleId() != null) {
             PersonRole personRole = personRoleService.findPersonRoleById(request.getRoleId());
-            person.setRole(personRole);
+            person.setPersonRole(personRole);
         }
 
         return mapper.map(personRepository.save(person), PersonDto.class);
@@ -74,14 +74,14 @@ public class PersonService {
 
     public List<PersonDto> findPersonsByRoleId(Long roleId) throws PersonRoleNotExistException {
         PersonRole personRole = personRoleService.findPersonRoleById(roleId);
-        return personRepository.findPeopleByRole(personRole)
+        return personRepository.findPeopleByPersonRole(personRole)
                 .stream()
                 .map(p -> mapper.map(p, PersonDto.class))
                 .collect(Collectors.toList());
     }
 
     public Person findDirectorById(Long id) throws PersonNotExistsException {
-        Optional<Person> person = personRepository.findPersonByIdAndRole_Role(id, PersonRoleEnum.DIRECTOR);
+        Optional<Person> person = personRepository.findPersonByIdAndPersonRole_Role(id, PersonRoleEnum.DIRECTOR);
         if (person.isEmpty())
             throw new PersonNotExistsException();
         return person.get();
@@ -95,10 +95,7 @@ public class PersonService {
     }
 
     public void deletePerson(Long id) throws PersonNotExistsException {
-        Optional<Person> person = personRepository.findById(id);
-        if (person.isEmpty()) {
-            throw new PersonNotExistsException();
-        }
-        personRepository.delete(person.get());
+        Person person = findPersonById(id);
+        personRepository.delete(person);
     }
 }

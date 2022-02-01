@@ -2,8 +2,8 @@ package com.filmapp.film;
 
 import com.filmapp.category.Category;
 import com.filmapp.category.CategoryService;
+import com.filmapp.category.exception.CategoryNotExistException;
 import com.filmapp.commons.exception.NotExistException;
-import com.filmapp.exception.CategoryNotExistException;
 import com.filmapp.film.exception.FilmNotExistException;
 import com.filmapp.film.payload.CreateFilmRequest;
 import com.filmapp.film.payload.UpdateFilmRequest;
@@ -125,9 +125,14 @@ public class FilmService {
             film.setCategory(category);
         }
         if (request.getDirectorId() != null) {
-            Person person = personService.findPersonById(request.getDirectorId());
-            film.setDirector(person);
+            Person director = personService.findPersonById(request.getDirectorId());
+            film.setDirector(director);
         }
         return mapper.map(filmRepository.save(film), FilmDto.class);
+    }
+
+    public void deleteFilm(Long id) throws FilmNotExistException {
+        Film film = findFilmById(id);
+        filmRepository.delete(film);
     }
 }

@@ -1,4 +1,4 @@
-package com.filmapp.exception;
+package com.filmapp.role.person.exception;
 
 import com.filmapp.commons.exception.NotExistException;
 

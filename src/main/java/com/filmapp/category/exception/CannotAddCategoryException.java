@@ -1,4 +1,4 @@
-package com.filmapp.exception;
+package com.filmapp.category.exception;
 
 public class CannotAddCategoryException extends Exception {
 
