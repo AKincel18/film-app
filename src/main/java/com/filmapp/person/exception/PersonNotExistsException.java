@@ -4,9 +4,7 @@ import com.filmapp.commons.exception.NotExistException;
 
 public class PersonNotExistsException extends NotExistException {
 
-    private static final String PERSON_NOT_EXIST = "Person does not exist";
-
     public PersonNotExistsException() {
-        super(PERSON_NOT_EXIST);
+        super(String.format(NOT_EXIST_MSG, "Person"));
     }
 }

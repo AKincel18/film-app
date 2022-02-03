@@ -22,9 +22,9 @@ public class UserDto implements UserDetails {
 
 
     public static UserDto build(User user) {
-        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getRole().name());
+        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getName().name());
         return new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(),
-                UserRoleEnum.valueOf(user.getRole().getRole().name()), authority);
+                UserRoleEnum.valueOf(user.getRole().getName().name()), authority);
     }
 
     @Override

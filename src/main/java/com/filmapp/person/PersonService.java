@@ -81,7 +81,7 @@ public class PersonService {
     }
 
     public Person findDirectorById(Long id) throws PersonNotExistsException {
-        Optional<Person> person = personRepository.findPersonByIdAndPersonRole_Role(id, PersonRoleEnum.DIRECTOR);
+        Optional<Person> person = personRepository.findPersonByIdAndPersonRole_Name(id, PersonRoleEnum.DIRECTOR);
         if (person.isEmpty())
             throw new PersonNotExistsException();
         return person.get();

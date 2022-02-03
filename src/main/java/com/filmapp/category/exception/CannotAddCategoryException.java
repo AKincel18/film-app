@@ -1,10 +1,10 @@
 package com.filmapp.category.exception;
 
-public class CannotAddCategoryException extends Exception {
+import com.filmapp.commons.exception.CannotAddException;
 
-    private static final String CANNOT_ADD_CATEGORY = "Cannot add category, contact with administrator";
+public class CannotAddCategoryException extends CannotAddException {
 
     public CannotAddCategoryException() {
-        super(CANNOT_ADD_CATEGORY);
+        super(String.format(CANNOT_ADD_MSG, "category"));
     }
 }

@@ -2,7 +2,8 @@ package com.filmapp.role.person;
 
 public enum PersonRoleEnum {
     ACTOR("Actor"),
-    DIRECTOR("Director");
+    DIRECTOR("Director"),
+    TEST("Test");
 
     private final String name;
 

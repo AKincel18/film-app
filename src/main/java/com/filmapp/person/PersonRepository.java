@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface PersonRepository extends JpaRepository<Person, Long> {
     List<Person> findPeopleByPersonRole(PersonRole role);
-    Optional<Person> findPersonByIdAndPersonRole_Role(Long id, PersonRoleEnum role);
+    Optional<Person> findPersonByIdAndPersonRole_Name(Long id, PersonRoleEnum role);
 }
