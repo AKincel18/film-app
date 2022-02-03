@@ -3,9 +3,12 @@ package com.filmapp.role.person;
 import com.filmapp.response.MessageResponse;
 import com.filmapp.role.person.exception.CannotAddPersonRoleException;
 import com.filmapp.role.person.exception.PersonRoleNotExistException;
+import com.filmapp.role.person.payload.CreatePersonRoleRequest;
+import com.filmapp.role.person.payload.UpdatePersonRoleRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -27,10 +30,10 @@ public class PersonRoleController {
 
     @PostMapping
     //@PreAuthorize("hasRole('ROLE_MODERATOR')")
-    public ResponseEntity<?> create(@RequestBody PersonRoleDto personRoleToCreate) {
+    public ResponseEntity<?> create(@RequestBody @Valid CreatePersonRoleRequest request) {
         PersonRoleDto createdPersonRole;
         try {
-            createdPersonRole = personRoleService.save(personRoleToCreate);
+            createdPersonRole = personRoleService.save(request);
         } catch (CannotAddPersonRoleException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
@@ -39,10 +42,10 @@ public class PersonRoleController {
 
     @PutMapping
     //@PreAuthorize("hasRole('ROLE_MODERATOR')")
-    public ResponseEntity<?> update(@RequestBody PersonRoleDto personRoleToUpdate) {
+    public ResponseEntity<?> update(@RequestBody @Valid UpdatePersonRoleRequest request) {
         PersonRoleDto updatedPersonRole;
         try {
-            updatedPersonRole = personRoleService.update(personRoleToUpdate);
+            updatedPersonRole = personRoleService.update(request);
         } catch (CannotAddPersonRoleException | PersonRoleNotExistException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }

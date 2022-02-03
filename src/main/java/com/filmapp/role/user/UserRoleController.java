@@ -2,9 +2,12 @@ package com.filmapp.role.user;
 
 import com.filmapp.response.MessageResponse;
 import com.filmapp.role.user.excpetion.CannotAddUserRoleException;
+import com.filmapp.role.user.payload.CreateUserRoleRequest;
+import com.filmapp.role.user.payload.UpdateUserRoleRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -25,10 +28,10 @@ public class UserRoleController {
 
     @PostMapping
     //@PreAuthorize("hasRole('ROLE_MODERATOR')")
-    public ResponseEntity<?> create(@RequestBody UserRoleDto userRoleToCreate) {
+    public ResponseEntity<?> create(@RequestBody @Valid CreateUserRoleRequest request) {
         UserRoleDto createdUserRole;
         try {
-            createdUserRole = userRoleService.save(userRoleToCreate);
+            createdUserRole = userRoleService.save(request);
         } catch (CannotAddUserRoleException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
@@ -37,10 +40,10 @@ public class UserRoleController {
 
     @PutMapping
     //@PreAuthorize("hasRole('ROLE_MODERATOR')")
-    public ResponseEntity<?> update(@RequestBody UserRoleDto userRoleToUpdate) {
+    public ResponseEntity<?> update(@RequestBody @Valid UpdateUserRoleRequest request) {
         UserRoleDto updatedUserRole;
         try {
-            updatedUserRole = userRoleService.update(userRoleToUpdate);
+            updatedUserRole = userRoleService.update(request);
         } catch (CannotAddUserRoleException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }

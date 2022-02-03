@@ -2,6 +2,8 @@ package com.filmapp.category;
 
 import com.filmapp.category.exception.CannotAddCategoryException;
 import com.filmapp.category.exception.CategoryNotExistException;
+import com.filmapp.category.payload.CreateCategoryRequest;
+import com.filmapp.category.payload.UpdateCategoryRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +29,8 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    public CategoryDto save(CategoryDto categoryToCreate) throws CannotAddCategoryException {
-        Category category = mapper.map(categoryToCreate, Category.class);
+    public CategoryDto save(CreateCategoryRequest request) throws CannotAddCategoryException {
+        Category category = mapper.map(request, Category.class);
         if (category == null || category.getName() == null) {
             throw new CannotAddCategoryException();
         }
@@ -36,13 +38,16 @@ public class CategoryService {
         return mapper.map(savedCategory, CategoryDto.class);
     }
 
-    public CategoryDto update(CategoryDto categoryToUpdate) throws CannotAddCategoryException {
-        if (categoryToUpdate == null)
+    public CategoryDto update(UpdateCategoryRequest request) throws CannotAddCategoryException, CategoryNotExistException {
+        if (request == null)
             throw new CannotAddCategoryException();
-        Optional<Category> category = categoryRepository.findById(categoryToUpdate.getId());
-        if (category.isEmpty())
+        Category category = findCategoryById(request.getId());
+        try {
+            category.setName(CategoryEnum.valueOf(request.getName()));
+        } catch (IllegalArgumentException e) {
             throw new CannotAddCategoryException();
-        return save(mapper.map(category.get(), CategoryDto.class));
+        }
+        return mapper.map(categoryRepository.save(category), CategoryDto.class);
     }
 
     public boolean delete(Long id) {

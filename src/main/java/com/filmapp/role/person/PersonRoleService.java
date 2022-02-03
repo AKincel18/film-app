@@ -3,6 +3,8 @@ package com.filmapp.role.person;
 
 import com.filmapp.role.person.exception.CannotAddPersonRoleException;
 import com.filmapp.role.person.exception.PersonRoleNotExistException;
+import com.filmapp.role.person.payload.CreatePersonRoleRequest;
+import com.filmapp.role.person.payload.UpdatePersonRoleRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +30,8 @@ public class PersonRoleService {
                 .collect(Collectors.toList());
     }
 
-    public PersonRoleDto save(PersonRoleDto personRoleToCreate) throws CannotAddPersonRoleException {
-        PersonRole personRole = mapper.map(personRoleToCreate, PersonRole.class);
+    public PersonRoleDto save(CreatePersonRoleRequest request) throws CannotAddPersonRoleException {
+        PersonRole personRole = mapper.map(request, PersonRole.class);
         if (personRole == null || personRole.getName() == null) {
             throw new CannotAddPersonRoleException();
         }
@@ -37,11 +39,16 @@ public class PersonRoleService {
         return mapper.map(savedPersonRole, PersonRoleDto.class);
     }
 
-    public PersonRoleDto update(PersonRoleDto personRoleToUpdate) throws CannotAddPersonRoleException, PersonRoleNotExistException {
-        if (personRoleToUpdate == null)
+    public PersonRoleDto update(UpdatePersonRoleRequest request) throws CannotAddPersonRoleException, PersonRoleNotExistException {
+        if (request == null)
             throw new CannotAddPersonRoleException();
-        PersonRole personRole = findPersonRoleById(personRoleToUpdate.getId());
-        return save(mapper.map(personRole, PersonRoleDto.class));
+        PersonRole personRole = findPersonRoleById(request.getId());
+        try {
+            personRole.setName(PersonRoleEnum.valueOf(request.getName()));
+        } catch (IllegalArgumentException e) {
+            throw new CannotAddPersonRoleException();
+        }
+        return mapper.map(personRoleRepository.save(personRole), PersonRoleDto.class);
     }
 
     public boolean delete(Long id) {

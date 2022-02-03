@@ -1,6 +1,8 @@
 package com.filmapp.role.user;
 
 import com.filmapp.role.user.excpetion.CannotAddUserRoleException;
+import com.filmapp.role.user.payload.CreateUserRoleRequest;
+import com.filmapp.role.user.payload.UpdateUserRoleRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +28,8 @@ public class UserRoleService {
                 .collect(Collectors.toList());
     }
 
-    public UserRoleDto save(UserRoleDto userRoleToCreate) throws CannotAddUserRoleException {
-        UserRole userRole = mapper.map(userRoleToCreate, UserRole.class);
+    public UserRoleDto save(CreateUserRoleRequest request) throws CannotAddUserRoleException {
+        UserRole userRole = mapper.map(request, UserRole.class);
         if (userRole == null || userRole.getName() == null) {
             throw new CannotAddUserRoleException();
         }
@@ -35,13 +37,14 @@ public class UserRoleService {
         return mapper.map(savedUserRole, UserRoleDto.class);
     }
 
-    public UserRoleDto update(UserRoleDto userRoleToUpdate) throws CannotAddUserRoleException {
-        if (userRoleToUpdate == null)
+    public UserRoleDto update(UpdateUserRoleRequest request) throws CannotAddUserRoleException {
+        if (request == null)
             throw new CannotAddUserRoleException();
-        Optional<UserRole> userRole = userRoleRepository.findById(userRoleToUpdate.getId());
-        if (userRole.isEmpty())
+        UserRole userRole = findUserRole(request.getName());
+        if (userRole == null) {
             throw new CannotAddUserRoleException();
-        return save(mapper.map(userRole.get(), UserRoleDto.class));
+        }
+        return mapper.map(userRoleRepository.save(userRole), UserRoleDto.class);
     }
 
     public boolean delete(Long id) {
