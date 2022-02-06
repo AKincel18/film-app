@@ -1,1 +1,0 @@
-insert into user_roles (id, name) values (nextval('USER_ROLES_SEQ'), 'ROLE_MODERATOR');

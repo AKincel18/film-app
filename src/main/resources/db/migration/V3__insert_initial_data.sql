@@ -10,3 +10,4 @@ insert into person_roles (id, name) values (nextval('PERSON_ROLES_SEQ'), 'DIRECT
 
 insert into user_roles (id, name) values (nextval('USER_ROLES_SEQ'), 'ROLE_ADMIN');
 insert into user_roles (id, name) values (nextval('USER_ROLES_SEQ'), 'ROLE_USER');
+insert into user_roles (id, name) values (nextval('USER_ROLES_SEQ'), 'ROLE_MODERATOR');
