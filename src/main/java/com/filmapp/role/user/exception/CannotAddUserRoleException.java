@@ -1,4 +1,4 @@
-package com.filmapp.role.user.excpetion;
+package com.filmapp.role.user.exception;
 
 import com.filmapp.commons.exception.CannotAddException;
 

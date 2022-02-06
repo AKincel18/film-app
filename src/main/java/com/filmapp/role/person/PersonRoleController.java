@@ -1,7 +1,8 @@
 package com.filmapp.role.person;
 
-import com.filmapp.response.MessageResponse;
+import com.filmapp.commons.exception.processing.MyExceptionProcessing;
 import com.filmapp.role.person.exception.CannotAddPersonRoleException;
+import com.filmapp.role.person.exception.DuplicatedPersonRoleException;
 import com.filmapp.role.person.exception.PersonRoleNotExistException;
 import com.filmapp.role.person.payload.CreatePersonRoleRequest;
 import com.filmapp.role.person.payload.UpdatePersonRoleRequest;
@@ -13,6 +14,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@MyExceptionProcessing
 @RequestMapping("api/person-roles")
 public class PersonRoleController {
 
@@ -30,25 +32,17 @@ public class PersonRoleController {
 
     @PostMapping
     //@PreAuthorize("hasRole('ROLE_MODERATOR')")
-    public ResponseEntity<?> create(@RequestBody @Valid CreatePersonRoleRequest request) {
-        PersonRoleDto createdPersonRole;
-        try {
-            createdPersonRole = personRoleService.save(request);
-        } catch (CannotAddPersonRoleException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+    public ResponseEntity<?> create(@RequestBody @Valid CreatePersonRoleRequest request)
+            throws CannotAddPersonRoleException, DuplicatedPersonRoleException {
+        PersonRoleDto createdPersonRole = personRoleService.save(request);
         return ResponseEntity.created(URI.create("/" + createdPersonRole.getId())).body(createdPersonRole);
     }
 
     @PutMapping
     //@PreAuthorize("hasRole('ROLE_MODERATOR')")
-    public ResponseEntity<?> update(@RequestBody @Valid UpdatePersonRoleRequest request) {
-        PersonRoleDto updatedPersonRole;
-        try {
-            updatedPersonRole = personRoleService.update(request);
-        } catch (CannotAddPersonRoleException | PersonRoleNotExistException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+    public ResponseEntity<?> update(@RequestBody @Valid UpdatePersonRoleRequest request)
+            throws CannotAddPersonRoleException, PersonRoleNotExistException {
+        PersonRoleDto updatedPersonRole = personRoleService.update(request);
         return ResponseEntity.created(URI.create("/" + updatedPersonRole.getId())).body(updatedPersonRole);
     }
 

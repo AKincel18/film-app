@@ -2,6 +2,7 @@ package com.filmapp.category;
 
 import com.filmapp.category.exception.CannotAddCategoryException;
 import com.filmapp.category.exception.CategoryNotExistException;
+import com.filmapp.category.exception.DuplicatedCategoryException;
 import com.filmapp.category.payload.CreateCategoryRequest;
 import com.filmapp.category.payload.UpdateCategoryRequest;
 import org.modelmapper.ModelMapper;
@@ -29,7 +30,12 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    public CategoryDto save(CreateCategoryRequest request) throws CannotAddCategoryException {
+    public CategoryDto save(CreateCategoryRequest request) throws CannotAddCategoryException, DuplicatedCategoryException {
+        CategoryEnum categoryEnum = CategoryEnum.findCategoryEnum(request.getName());
+        if (categoryRepository.existsByName(categoryEnum)) {
+            throw new DuplicatedCategoryException();
+        }
+        request.setName(categoryEnum.name());
         Category category = mapper.map(request, Category.class);
         if (category == null || category.getName() == null) {
             throw new CannotAddCategoryException();

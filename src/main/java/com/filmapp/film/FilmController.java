@@ -2,10 +2,10 @@ package com.filmapp.film;
 
 import com.filmapp.category.exception.CategoryNotExistException;
 import com.filmapp.commons.exception.NotExistException;
+import com.filmapp.commons.exception.processing.MyExceptionProcessing;
 import com.filmapp.film.exception.FilmNotExistException;
 import com.filmapp.film.payload.CreateFilmRequest;
 import com.filmapp.film.payload.UpdateFilmRequest;
-import com.filmapp.response.MessageResponse;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
+@MyExceptionProcessing
 @RequestMapping("api/films")
 public class FilmController {
 
@@ -31,46 +32,26 @@ public class FilmController {
     }
 
     @PostMapping
-    ResponseEntity<?> createFilm(@Valid @RequestBody CreateFilmRequest request) {
-        FilmDto createdFilmDto;
-        try {
-            createdFilmDto = filmService.createFilm(request);
-        } catch (NotExistException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+    ResponseEntity<?> createFilm(@Valid @RequestBody CreateFilmRequest request) throws NotExistException {
+        FilmDto createdFilmDto = filmService.createFilm(request);
         return ResponseEntity.created(URI.create("/" + createdFilmDto.getId())).body(createdFilmDto);
     }
 
     @PatchMapping
-    ResponseEntity<?> updateFilm(@RequestBody @Valid UpdateFilmRequest request) {
-        FilmDto updatedFilm;
-        try {
-            updatedFilm = filmService.updateFilm(request);
-        } catch (NotExistException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+    ResponseEntity<?> updateFilm(@RequestBody @Valid UpdateFilmRequest request) throws NotExistException {
+        FilmDto updatedFilm = filmService.updateFilm(request);
         return ResponseEntity.ok(updatedFilm);
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<?> findFilmById(@PathVariable Long id) {
-        FilmDto filmDto;
-        try {
-            filmDto = filmService.findFilmDtoById(id);
-        } catch (FilmNotExistException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+    ResponseEntity<?> findFilmById(@PathVariable Long id) throws FilmNotExistException {
+        FilmDto filmDto = filmService.findFilmDtoById(id);
         return ResponseEntity.ok(filmDto);
     }
 
     @GetMapping("/category/{id}")
-    ResponseEntity<?> findFilmsByCategory(@PathVariable("id") Long categoryId) {
-        List<FilmDto> films;
-        try {
-            films = filmService.findFilmsByCategory(categoryId);
-        } catch (CategoryNotExistException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+    ResponseEntity<?> findFilmsByCategory(@PathVariable("id") Long categoryId) throws CategoryNotExistException {
+        List<FilmDto> films = filmService.findFilmsByCategory(categoryId);
         return ResponseEntity.ok().body(films);
     }
 
@@ -95,12 +76,8 @@ public class FilmController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<?> deleteFilm(@PathVariable Long id) {
-        try {
-            filmService.deleteFilm(id);
-        } catch (FilmNotExistException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+    ResponseEntity<?> deleteFilm(@PathVariable Long id) throws FilmNotExistException {
+        filmService.deleteFilm(id);
         return findAllFilms();
     }
 }

@@ -2,9 +2,10 @@ package com.filmapp.category;
 
 import com.filmapp.category.exception.CannotAddCategoryException;
 import com.filmapp.category.exception.CategoryNotExistException;
+import com.filmapp.category.exception.DuplicatedCategoryException;
 import com.filmapp.category.payload.CreateCategoryRequest;
 import com.filmapp.category.payload.UpdateCategoryRequest;
-import com.filmapp.response.MessageResponse;
+import com.filmapp.commons.exception.processing.MyExceptionProcessing;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@MyExceptionProcessing
 @RequestMapping("api/categories")
 public class CategoryController {
     
@@ -30,25 +32,17 @@ public class CategoryController {
 
     @PostMapping
     //@PreAuthorize("hasRole('ROLE_MODERATOR')")
-    public ResponseEntity<?> create(@RequestBody @Valid CreateCategoryRequest request) {
-        CategoryDto createdCategory;
-        try {
-            createdCategory = categoryService.save(request);
-        } catch (CannotAddCategoryException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+    public ResponseEntity<?> create(@RequestBody @Valid CreateCategoryRequest request)
+            throws DuplicatedCategoryException, CannotAddCategoryException {
+        CategoryDto createdCategory = categoryService.save(request);
         return ResponseEntity.created(URI.create("/" + createdCategory.getId())).body(createdCategory);
     }
 
     @PutMapping
     //@PreAuthorize("hasRole('ROLE_MODERATOR')")
-    public ResponseEntity<?> update(@RequestBody @Valid UpdateCategoryRequest request) {
-        CategoryDto updatedCategory;
-        try {
-            updatedCategory = categoryService.update(request);
-        } catch (CannotAddCategoryException | CategoryNotExistException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+    public ResponseEntity<?> update(@RequestBody @Valid UpdateCategoryRequest request)
+            throws CannotAddCategoryException, CategoryNotExistException {
+        CategoryDto updatedCategory = categoryService.update(request);
         return ResponseEntity.created(URI.create("/" + updatedCategory.getId())).body(updatedCategory);
     }
 

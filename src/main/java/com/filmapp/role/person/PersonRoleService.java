@@ -2,6 +2,7 @@ package com.filmapp.role.person;
 
 
 import com.filmapp.role.person.exception.CannotAddPersonRoleException;
+import com.filmapp.role.person.exception.DuplicatedPersonRoleException;
 import com.filmapp.role.person.exception.PersonRoleNotExistException;
 import com.filmapp.role.person.payload.CreatePersonRoleRequest;
 import com.filmapp.role.person.payload.UpdatePersonRoleRequest;
@@ -30,7 +31,12 @@ public class PersonRoleService {
                 .collect(Collectors.toList());
     }
 
-    public PersonRoleDto save(CreatePersonRoleRequest request) throws CannotAddPersonRoleException {
+    public PersonRoleDto save(CreatePersonRoleRequest request) throws CannotAddPersonRoleException, DuplicatedPersonRoleException {
+        PersonRoleEnum personRoleEnum = PersonRoleEnum.findPersonRoleEnum(request.getName());
+        if (personRoleRepository.existsByName(personRoleEnum)) {
+            throw new DuplicatedPersonRoleException();
+        }
+        request.setName(personRoleEnum.name());
         PersonRole personRole = mapper.map(request, PersonRole.class);
         if (personRole == null || personRole.getName() == null) {
             throw new CannotAddPersonRoleException();

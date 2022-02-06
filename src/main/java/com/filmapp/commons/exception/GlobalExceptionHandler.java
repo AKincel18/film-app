@@ -1,6 +1,6 @@
 package com.filmapp.commons.exception;
 
-import com.filmapp.response.MessageResponse;
+import com.filmapp.commons.response.MessageResponse;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

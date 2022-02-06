@@ -1,7 +1,8 @@
 package com.filmapp.role.user;
 
-import com.filmapp.response.MessageResponse;
-import com.filmapp.role.user.excpetion.CannotAddUserRoleException;
+import com.filmapp.commons.exception.processing.MyExceptionProcessing;
+import com.filmapp.role.user.exception.CannotAddUserRoleException;
+import com.filmapp.role.user.exception.DuplicatedUserRoleException;
 import com.filmapp.role.user.payload.CreateUserRoleRequest;
 import com.filmapp.role.user.payload.UpdateUserRoleRequest;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@MyExceptionProcessing
 @RequestMapping("api/user-roles")
 public class UserRoleController {
     private final UserRoleService userRoleService;
@@ -28,25 +30,16 @@ public class UserRoleController {
 
     @PostMapping
     //@PreAuthorize("hasRole('ROLE_MODERATOR')")
-    public ResponseEntity<?> create(@RequestBody @Valid CreateUserRoleRequest request) {
-        UserRoleDto createdUserRole;
-        try {
-            createdUserRole = userRoleService.save(request);
-        } catch (CannotAddUserRoleException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+    public ResponseEntity<?> create(@RequestBody @Valid CreateUserRoleRequest request)
+            throws CannotAddUserRoleException, DuplicatedUserRoleException {
+        UserRoleDto createdUserRole = userRoleService.save(request);
         return ResponseEntity.created(URI.create("/" + createdUserRole.getId())).body(createdUserRole);
     }
 
     @PutMapping
     //@PreAuthorize("hasRole('ROLE_MODERATOR')")
-    public ResponseEntity<?> update(@RequestBody @Valid UpdateUserRoleRequest request) {
-        UserRoleDto updatedUserRole;
-        try {
-            updatedUserRole = userRoleService.update(request);
-        } catch (CannotAddUserRoleException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+    public ResponseEntity<?> update(@RequestBody @Valid UpdateUserRoleRequest request) throws CannotAddUserRoleException {
+        UserRoleDto updatedUserRole = userRoleService.update(request);
         return ResponseEntity.created(URI.create("/" + updatedUserRole.getId())).body(updatedUserRole);
     }
 

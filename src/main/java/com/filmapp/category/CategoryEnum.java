@@ -1,5 +1,9 @@
 package com.filmapp.category;
 
+import com.filmapp.category.exception.CannotAddCategoryException;
+
+import java.util.Arrays;
+
 public enum CategoryEnum {
     COMEDY("Comedy"),
     THRILLER("Thriller"),
@@ -16,5 +20,12 @@ public enum CategoryEnum {
 
     public String getName() {
         return name;
+    }
+
+    public static CategoryEnum findCategoryEnum(String name) throws CannotAddCategoryException {
+        return Arrays.stream(values())
+                .filter(c -> c.getName().equals(name))
+                .findFirst()
+                .orElseThrow(CannotAddCategoryException::new);
     }
 }

@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PersonRoleRepository extends JpaRepository<PersonRole, Long> {
+    boolean existsByName(PersonRoleEnum name);
 }

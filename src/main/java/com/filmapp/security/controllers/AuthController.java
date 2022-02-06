@@ -1,6 +1,6 @@
 package com.filmapp.security.controllers;
 
-import com.filmapp.response.MessageResponse;
+import com.filmapp.commons.response.MessageResponse;
 import com.filmapp.security.exceptions.UserNotSavedException;
 import com.filmapp.security.payload.request.LoginRequest;
 import com.filmapp.security.payload.request.SignupRequest;

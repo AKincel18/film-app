@@ -1,6 +1,7 @@
 package com.filmapp.role.user;
 
-import com.filmapp.role.user.excpetion.CannotAddUserRoleException;
+import com.filmapp.role.user.exception.CannotAddUserRoleException;
+import com.filmapp.role.user.exception.DuplicatedUserRoleException;
 import com.filmapp.role.user.payload.CreateUserRoleRequest;
 import com.filmapp.role.user.payload.UpdateUserRoleRequest;
 import org.modelmapper.ModelMapper;
@@ -28,7 +29,12 @@ public class UserRoleService {
                 .collect(Collectors.toList());
     }
 
-    public UserRoleDto save(CreateUserRoleRequest request) throws CannotAddUserRoleException {
+    public UserRoleDto save(CreateUserRoleRequest request) throws CannotAddUserRoleException, DuplicatedUserRoleException {
+        UserRoleEnum userRoleEnum = UserRoleEnum.findUserRoleEnum(request.getName());
+        if (userRoleRepository.existsByName(userRoleEnum)) {
+            throw new DuplicatedUserRoleException();
+        }
+        request.setName(userRoleEnum.name());
         UserRole userRole = mapper.map(request, UserRole.class);
         if (userRole == null || userRole.getName() == null) {
             throw new CannotAddUserRoleException();
@@ -42,6 +48,11 @@ public class UserRoleService {
             throw new CannotAddUserRoleException();
         UserRole userRole = findUserRole(request.getName());
         if (userRole == null) {
+            throw new CannotAddUserRoleException();
+        }
+        try {
+            userRole.setName(UserRoleEnum.valueOf(request.getName()));
+        } catch (IllegalArgumentException e) {
             throw new CannotAddUserRoleException();
         }
         return mapper.map(userRoleRepository.save(userRole), UserRoleDto.class);
