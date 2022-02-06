@@ -4,39 +4,40 @@ import com.filmapp.film.Film;
 import com.filmapp.role.person.PersonRole;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
-@Document("persons")
+@Entity(name = "persons")
 public class Person {
 
     @Id
-    private ObjectId id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-    @NotBlank
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
+    @Column(name = "last_name", nullable = false)
     @NotBlank
     private String lastName;
 
+    @Column(name = "birth_date")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthDate;
 
     //private String nationality;
 
-    @DBRef
-    private PersonRole role;
+    @OneToOne
+    @JoinColumn(name = "person_role_id", referencedColumnName = "id")
+    private PersonRole personRole;
 
-    @DBRef
-    private List<Film> films;
+    @ManyToMany(mappedBy = "actors")
+    private Set<Film> films;
 
 }

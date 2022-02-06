@@ -1,16 +1,20 @@
 package com.filmapp.person;
 
-import com.filmapp.exception.PersonRoleNotExistException;
-import com.filmapp.response.MessageResponse;
-import org.bson.types.ObjectId;
+import com.filmapp.commons.exception.NotExistException;
+import com.filmapp.commons.exception.processing.MyExceptionProcessing;
+import com.filmapp.person.exception.PersonNotExistsException;
+import com.filmapp.person.payload.CreatePersonRequest;
+import com.filmapp.person.payload.UpdatePersonRequest;
+import com.filmapp.role.person.exception.PersonRoleNotExistException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
 @RestController
+@MyExceptionProcessing
 @RequestMapping("api/persons")
 public class PersonController {
 
@@ -21,30 +25,39 @@ public class PersonController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_MODERATOR')")
-    ResponseEntity<?> createPerson(@RequestBody PersonDto personDto) {
-        PersonDto savedPersonDto;
-        try {
-            savedPersonDto = personService.createPerson(personDto);
-        } catch (PersonRoleNotExistException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+    //@PreAuthorize("hasRole('ROLE_MODERATOR')")
+    ResponseEntity<?> createPerson(@RequestBody @Valid CreatePersonRequest request) throws PersonRoleNotExistException {
+        PersonDto savedPersonDto = personService.createPerson(request);
         return ResponseEntity.created(URI.create("/" + savedPersonDto.getId())).body(savedPersonDto);
     }
 
+    @PatchMapping
+    //@PreAuthorize("hasRole('ROLE_MODERATOR')")
+    ResponseEntity<?> updatePerson(@RequestBody @Valid UpdatePersonRequest request) throws NotExistException {
+        PersonDto updatedPerson = personService.updatePerson(request);
+        return ResponseEntity.ok(updatedPerson);
+    }
+
+    @GetMapping
+    ResponseEntity<?> getAllPersons() {
+        return ResponseEntity.ok(personService.getAllPersons());
+    }
+
     @GetMapping("/{id}")
-    ResponseEntity<PersonDto> getPersonById(@PathVariable ObjectId id) {
-        PersonDto personDto = personService.findPersonById(id);
-        if (personDto != null)
-            return ResponseEntity.ok(personDto);
-        return ResponseEntity.notFound().build();
+    ResponseEntity<?> getPersonById(@PathVariable Long id) throws PersonNotExistsException {
+        PersonDto personDto = personService.findPersonDtoById(id);
+        return ResponseEntity.ok(personDto);
     }
 
     @GetMapping("/role/{id}")
-    ResponseEntity<List<PersonDto>> getByRole(@PathVariable ObjectId id) {
+    ResponseEntity<?> getByRole(@PathVariable Long id) throws PersonRoleNotExistException {
         List<PersonDto> persons = personService.findPersonsByRoleId(id);
-        if (persons != null)
-            return ResponseEntity.ok(persons);
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(persons);
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<?> deletePerson(@PathVariable Long id) throws PersonNotExistsException {
+        personService.deletePerson(id);
+        return getAllPersons();
     }
 }

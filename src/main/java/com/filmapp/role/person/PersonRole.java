@@ -1,26 +1,21 @@
 package com.filmapp.role.person;
 
-import com.filmapp.generic.BaseEntity;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@Document("person-roles")
-public class PersonRole extends BaseEntity {
+@Entity(name = "person_roles")
+public class PersonRole {
 
-    public PersonRole(String name) {
-        super(name);
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PERSON_ROLES_GEN_SEQ")
+    @SequenceGenerator(name = "PERSON_ROLES_GEN_SEQ", sequenceName = "PERSON_ROLES_SEQ", allocationSize = 1)
+    private Long id;
 
-    @Override
-    public String toString() {
-        return "PersonRole{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "name", unique = true)
+    private PersonRoleEnum name;
 }

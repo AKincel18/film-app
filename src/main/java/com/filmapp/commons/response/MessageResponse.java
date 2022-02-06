@@ -1,4 +1,4 @@
-package com.filmapp.response;
+package com.filmapp.commons.response;
 
 import lombok.Data;
 

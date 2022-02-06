@@ -3,7 +3,6 @@ package com.filmapp.user;
 import com.filmapp.role.user.UserRoleEnum;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserDto implements UserDetails {
 
-    @Getter private final ObjectId id;
+    @Getter private final Long id;
     private final String username;
     @Getter private final String email;
     private final String password;
@@ -23,9 +22,9 @@ public class UserDto implements UserDetails {
 
 
     public static UserDto build(User user) {
-        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getName());
+        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getName().name());
         return new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(),
-                UserRoleEnum.valueOf(user.getRole().getName()), authority);
+                UserRoleEnum.valueOf(user.getRole().getName().name()), authority);
     }
 
     @Override

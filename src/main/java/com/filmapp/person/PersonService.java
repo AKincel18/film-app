@@ -1,9 +1,14 @@
 package com.filmapp.person;
 
-import com.filmapp.exception.PersonRoleNotExistException;
-import com.filmapp.generic.GenericRepository;
+import com.filmapp.commons.exception.NotExistException;
+import com.filmapp.person.exception.PersonNotExistsException;
+import com.filmapp.person.payload.CreatePersonRequest;
+import com.filmapp.person.payload.UpdatePersonRequest;
 import com.filmapp.role.person.PersonRole;
-import org.bson.types.ObjectId;
+import com.filmapp.role.person.PersonRoleEnum;
+import com.filmapp.role.person.PersonRoleService;
+import com.filmapp.role.person.exception.PersonRoleNotExistException;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,34 +19,83 @@ import java.util.stream.Collectors;
 public class PersonService {
 
     private final PersonRepository personRepository;
-    private final GenericRepository<PersonRole> personRoleRepository;
-    private final PersonMapper mapper;
+    private final PersonRoleService personRoleService;
+    private final ModelMapper mapper;
 
-    public PersonService(PersonRepository personRepository, GenericRepository<PersonRole> personRoleRepository) {
+    public PersonService(PersonRepository personRepository, PersonRoleService personRoleService) {
         this.personRepository = personRepository;
-        this.personRoleRepository = personRoleRepository;
-        this.mapper = new PersonMapper();
+        this.personRoleService = personRoleService;
+        this.mapper = new ModelMapper();
     }
 
-    public PersonDto createPerson(PersonDto personDto) throws PersonRoleNotExistException {
-        PersonRole personRole = personRoleRepository.getByName(personDto.getRole());
-        if (personRole == null)
-            throw new PersonRoleNotExistException();
-        Person savedPerson = personRepository.save(mapper.map(personRole, personDto, Person.class));
+    public PersonDto createPerson(CreatePersonRequest request) throws PersonRoleNotExistException {
+        PersonRole personRole = personRoleService.findPersonRoleById(request.getRoleId());
+        Person person = mapper.map(request, Person.class);
+        person.setPersonRole(personRole);
+        Person savedPerson = personRepository.save(person);
         return mapper.map(savedPerson, PersonDto.class);
     }
 
-    public PersonDto findPersonById(ObjectId id) {
-        Optional<Person> person = personRepository.findById(id);
-        return person.map(p -> mapper.map(p, PersonDto.class)).orElse(null);
+    public PersonDto updatePerson(UpdatePersonRequest request) throws NotExistException {
+        if (request.getId() == null)
+            throw new PersonNotExistsException();
+        Optional<Person> personOptional = personRepository.findById(request.getId());
+        if (personOptional.isEmpty())
+            throw new PersonNotExistsException();
+        Person person = personOptional.get();
+        if (request.getFirstName() != null) {
+            person.setFirstName(request.getFirstName());
+        }
+        if (request.getLastName() != null) {
+            person.setLastName(request.getLastName());
+        }
+        if (request.getBirthDate() != null) {
+            person.setBirthDate(request.getBirthDate());
+        }
+        if (request.getRoleId() != null) {
+            PersonRole personRole = personRoleService.findPersonRoleById(request.getRoleId());
+            person.setPersonRole(personRole);
+        }
+
+        return mapper.map(personRepository.save(person), PersonDto.class);
     }
 
-    public List<PersonDto> findPersonsByRoleId(ObjectId roleId) {
-        Optional<PersonRole> personRole = personRoleRepository.findById(roleId);
-        return personRole.map(role -> personRepository.findPeopleByRole(role)
-                        .stream()
-                        .map(p -> mapper.map(p, PersonDto.class))
-                        .collect(Collectors.toList()))
-                .orElse(null);
+    public PersonDto findPersonDtoById(Long id) throws PersonNotExistsException {
+        return mapper.map(findPersonById(id), PersonDto.class);
+    }
+
+    public Person findPersonById(Long id) throws PersonNotExistsException{
+        Optional<Person> person = personRepository.findById(id);
+        if (person.isEmpty()) {
+            throw new PersonNotExistsException();
+        }
+        return person.get();
+    }
+
+    public List<PersonDto> findPersonsByRoleId(Long roleId) throws PersonRoleNotExistException {
+        PersonRole personRole = personRoleService.findPersonRoleById(roleId);
+        return personRepository.findPeopleByPersonRole(personRole)
+                .stream()
+                .map(p -> mapper.map(p, PersonDto.class))
+                .collect(Collectors.toList());
+    }
+
+    public Person findDirectorById(Long id) throws PersonNotExistsException {
+        Optional<Person> person = personRepository.findPersonByIdAndPersonRole_Name(id, PersonRoleEnum.DIRECTOR);
+        if (person.isEmpty())
+            throw new PersonNotExistsException();
+        return person.get();
+    }
+
+    public List<PersonDto> getAllPersons() {
+        return personRepository.findAll()
+                .stream()
+                .map(p -> mapper.map(p, PersonDto.class))
+                .collect(Collectors.toList());
+    }
+
+    public void deletePerson(Long id) throws PersonNotExistsException {
+        Person person = findPersonById(id);
+        personRepository.delete(person);
     }
 }

@@ -1,8 +1,7 @@
 package com.filmapp.category;
 
-import com.filmapp.generic.GenericRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public interface CategoryRepository extends GenericRepository<Category> {
+public interface CategoryRepository extends JpaRepository<Category, Long> {
+    boolean existsByName(CategoryEnum name);
 }

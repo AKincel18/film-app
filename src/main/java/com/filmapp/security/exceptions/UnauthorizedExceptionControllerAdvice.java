@@ -1,6 +1,6 @@
 package com.filmapp.security.exceptions;
 
-import com.filmapp.response.MessageResponse;
+import com.filmapp.commons.response.MessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;

@@ -1,20 +1,21 @@
 package com.filmapp.role.user;
 
-import com.filmapp.generic.BaseEntity;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@Document("user-roles")
-public class UserRole extends BaseEntity {
+@Entity(name = "user_roles")
+public class UserRole {
 
-    public UserRole(String name) {
-        super(name);
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_ROLES_GEN_SEQ")
+    @SequenceGenerator(name = "USER_ROLES_GEN_SEQ", sequenceName = "USER_ROLES_SEQ", allocationSize = 1)
+    private Long id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "name", unique = true)
+    private UserRoleEnum name;
 }
