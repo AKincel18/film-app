@@ -98,4 +98,11 @@ public class PersonService {
         Person person = findPersonById(id);
         personRepository.delete(person);
     }
+
+    public List<PersonDto> getAllDirectors() {
+        return personRepository.findPeopleByPersonRole_NameOrderByLastNameAscFirstName(PersonRoleEnum.DIRECTOR)
+                .stream()
+                .map(p -> mapper.map(p, PersonDto.class))
+                .collect(Collectors.toList());
+    }
 }

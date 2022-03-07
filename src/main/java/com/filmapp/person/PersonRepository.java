@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface PersonRepository extends JpaRepository<Person, Long> {
     List<Person> findPeopleByPersonRole(PersonRole role);
     Optional<Person> findPersonByIdAndPersonRole_Name(Long id, PersonRoleEnum role);
+    List<Person> findPeopleByPersonRole_NameOrderByLastNameAscFirstName(PersonRoleEnum role);
 }
