@@ -60,4 +60,10 @@ public class PersonController {
         personService.deletePerson(id);
         return getAllPersons();
     }
+
+    @GetMapping("/directors")
+    ResponseEntity<?> getDirectors() {
+        List<PersonDto> directors = personService.getAllDirectors();
+        return ResponseEntity.ok(directors);
+    }
 }
