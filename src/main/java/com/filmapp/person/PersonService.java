@@ -8,7 +8,6 @@ import com.filmapp.role.person.PersonRole;
 import com.filmapp.role.person.PersonRoleEnum;
 import com.filmapp.role.person.PersonRoleService;
 import com.filmapp.role.person.exception.PersonRoleNotExistException;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,12 +19,12 @@ public class PersonService {
 
     private final PersonRepository personRepository;
     private final PersonRoleService personRoleService;
-    private final ModelMapper mapper;
+    private final PersonMapper mapper;
 
     public PersonService(PersonRepository personRepository, PersonRoleService personRoleService) {
         this.personRepository = personRepository;
         this.personRoleService = personRoleService;
-        this.mapper = new ModelMapper();
+        this.mapper = new PersonMapper();
     }
 
     public PersonDto createPerson(CreatePersonRequest request) throws PersonRoleNotExistException {
@@ -90,7 +89,7 @@ public class PersonService {
     public List<PersonDto> getAllPersons() {
         return personRepository.findAll()
                 .stream()
-                .map(p -> mapper.map(p, PersonDto.class))
+                .map(p -> mapper.map(p.getPersonRole(), p, PersonDto.class))
                 .collect(Collectors.toList());
     }
 
