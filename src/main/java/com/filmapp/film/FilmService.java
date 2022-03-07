@@ -10,8 +10,6 @@ import com.filmapp.film.payload.UpdateFilmRequest;
 import com.filmapp.person.Person;
 import com.filmapp.person.PersonService;
 import com.filmapp.person.exception.PersonNotExistsException;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,20 +25,19 @@ public class FilmService {
     private final FilmRepository filmRepository;
     private final CategoryService categoryService;
     private final PersonService personService;
-    private final ModelMapper mapper;
+    private final FilmMapper mapper;
 
     public FilmService(FilmRepository filmRepository, CategoryService categoryRepository, PersonService personService) {
         this.filmRepository = filmRepository;
         this.categoryService = categoryRepository;
         this.personService = personService;
-        this.mapper = new ModelMapper();
-        this.mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        this.mapper = new FilmMapper();
     }
 
     public List<FilmDto> getAllFilms() {
         return filmRepository.findAll()
                 .stream()
-                .map(f -> mapper.map(f, FilmDto.class))
+                .map(f -> mapper.map(f.getCategory(), f, FilmDto.class))
                 .collect(Collectors.toList());
     }
 
