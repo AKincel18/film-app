@@ -26,8 +26,9 @@ public class CategoryController {
 
     @GetMapping
     //@PreAuthorize("hasAnyRole({'ROLE_ADMIN', 'ROLE_MODERATOR'})")
-    public ResponseEntity<List<CategoryDto>> getAll() {
-        return ResponseEntity.ok(categoryService.getAll());
+    public ResponseEntity<List<CategoryDto>> getAll(@RequestParam("pageSize") int pageSize,
+                                                    @RequestParam("pageIndex") int pageIndex) {
+        return categoryService.getAll(pageSize, pageIndex);
     }
 
     @PostMapping
@@ -48,8 +49,8 @@ public class CategoryController {
 
     @DeleteMapping("/{id}")
     //@PreAuthorize("hasRole('ROLE_MODERATOR')")
-    public ResponseEntity<List<CategoryDto>> delete(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         boolean isDeleted = categoryService.delete(id);
-        return isDeleted ? ResponseEntity.ok().body(categoryService.getAll()) : ResponseEntity.notFound().build();
+        return isDeleted ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 }

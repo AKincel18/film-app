@@ -6,6 +6,8 @@ import com.filmapp.category.exception.DuplicatedCategoryException;
 import com.filmapp.category.payload.CreateCategoryRequest;
 import com.filmapp.category.payload.UpdateCategoryRequest;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,11 +25,15 @@ public class CategoryService {
         this.mapper = new ModelMapper();
     }
 
-    public List<CategoryDto> getAll() {
-        return categoryRepository.findAll()
+    public ResponseEntity<List<CategoryDto>> getAll(int pageSize, int pageIndex) {
+        long categoryCount = categoryRepository.findAll().size();
+        List<CategoryDto> categories = categoryRepository.findAll(PageRequest.of(pageIndex, pageSize))
                 .stream()
                 .map(c -> mapper.map(c, CategoryDto.class))
                 .collect(Collectors.toList());
+        return ResponseEntity.ok().header("X-MAX-RESULTS", String.valueOf(categoryCount))
+                .header("Access-Control-Expose-Headers", "X-MAX-RESULTS")
+                .body(categories);
     }
 
     public CategoryDto save(CreateCategoryRequest request) throws CannotAddCategoryException, DuplicatedCategoryException {
