@@ -1,21 +1,15 @@
 package com.filmapp.role.user;
 
+import com.filmapp.dictionary.Dictionary;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @Entity(name = "user_roles")
-public class UserRole {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_ROLES_GEN_SEQ")
-    @SequenceGenerator(name = "USER_ROLES_GEN_SEQ", sequenceName = "USER_ROLES_SEQ", allocationSize = 1)
-    private Long id;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "name", unique = true)
-    private UserRoleEnum name;
+public class UserRole extends Dictionary {
 }

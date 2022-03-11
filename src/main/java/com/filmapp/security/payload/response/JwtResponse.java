@@ -1,6 +1,5 @@
 package com.filmapp.security.payload.response;
 
-import com.filmapp.role.user.UserRoleEnum;
 import com.filmapp.user.UserDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,9 +11,9 @@ public class JwtResponse {
     private Long id;
     private String username;
     private String email;
-    private UserRoleEnum role;
+    private String role;
 
-    public JwtResponse(String token, Long id, String username, String email, UserRoleEnum role) {
+    public JwtResponse(String token, Long id, String username, String email, String role) {
         this.token = token;
         this.id = id;
         this.username = username;
@@ -27,7 +26,7 @@ public class JwtResponse {
                 userDto.getId(),
                 userDto.getUsername(),
                 userDto.getEmail(),
-                UserRoleEnum.valueOf(role)
+                role
         );
     }
 }

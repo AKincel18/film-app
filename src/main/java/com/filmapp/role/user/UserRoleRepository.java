@@ -1,13 +1,8 @@
 package com.filmapp.role.user;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.filmapp.dictionary.DictionaryRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
-public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
-    Optional<UserRole> findByName(UserRoleEnum role);
-
-    boolean existsByName(UserRoleEnum userRoleEnum);
+public interface UserRoleRepository extends DictionaryRepository<UserRole> {
 }

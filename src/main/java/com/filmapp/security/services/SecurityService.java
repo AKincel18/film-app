@@ -1,7 +1,7 @@
 package com.filmapp.security.services;
 
 import com.filmapp.role.user.UserRole;
-import com.filmapp.role.user.UserRoleService;
+import com.filmapp.role.user.UserRoleRepository;
 import com.filmapp.security.exceptions.UserNotSavedException;
 import com.filmapp.security.jwt.JwtUtils;
 import com.filmapp.security.payload.request.LoginRequest;
@@ -19,6 +19,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 import static com.filmapp.security.consts.Message.*;
 
 @Service
@@ -27,7 +29,7 @@ public class SecurityService {
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
-    private final UserRoleService userRoleService;
+    private final UserRoleRepository userRoleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
 
@@ -54,15 +56,16 @@ public class SecurityService {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new UserNotSavedException(EMAIL_EXISTS);
         }
-        UserRole userRole = userRoleService.findUserRole(request.getRole());
-        if (userRole == null) {
+
+        Optional<UserRole> userRole = userRoleRepository.findByName(request.getRole());
+        if (userRole.isEmpty()) {
             throw new UserNotSavedException(ROLE_NOT_EXIST);
         }
 
         User user = new User(request.getUsername(),
                 request.getEmail(),
                 encoder.encode(request.getPassword()),
-                userRole);
+                userRole.get());
 
         userRepository.save(user);
     }
