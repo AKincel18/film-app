@@ -1,18 +1,22 @@
-package com.filmapp.category.payload;
+package com.filmapp.dictionary;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
-public class UpdateCategoryRequest {
+@MappedSuperclass
+public abstract class Dictionary {
 
-    @NotNull(message = "Id is not provided")
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "name", unique = true)
     @NotBlank(message = "Name must be not blank")
     private String name;
+
 }

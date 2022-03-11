@@ -1,7 +1,6 @@
 package com.filmapp.category;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.filmapp.dictionary.DictionaryRepository;
 
-public interface CategoryRepository extends JpaRepository<Category, Long> {
-    boolean existsByName(CategoryEnum name);
+public interface CategoryRepository extends DictionaryRepository<Category> {
 }

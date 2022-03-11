@@ -2,8 +2,9 @@ package com.filmapp.film;
 
 import com.filmapp.category.Category;
 import com.filmapp.category.CategoryService;
-import com.filmapp.category.exception.CategoryNotExistException;
+import com.filmapp.category.exceptions.CategoryNotExistException;
 import com.filmapp.commons.exception.NotExistException;
+import com.filmapp.dictionary.DictionaryType;
 import com.filmapp.film.exception.FilmNotExistException;
 import com.filmapp.film.payload.CreateFilmRequest;
 import com.filmapp.film.payload.UpdateFilmRequest;
@@ -47,7 +48,7 @@ public class FilmService {
     public FilmDto createFilm(CreateFilmRequest request) throws NotExistException {
         if (request.getCategoryId() == null)
             throw new CategoryNotExistException();
-        Category category = categoryService.findCategoryById(request.getCategoryId());
+        Category category = categoryService.findById(request.getCategoryId(), DictionaryType.CATEGORY);
 
         if (request.getDirectorId() == null)
             throw new PersonNotExistsException();
@@ -72,8 +73,8 @@ public class FilmService {
         return film.get();
     }
 
-    public List<FilmDto> findFilmsByCategory(Long id) throws CategoryNotExistException {
-        Category category = categoryService.findCategoryById(id);
+    public List<FilmDto> findFilmsByCategory(Long id) throws NotExistException {
+        Category category = categoryService.findById(id, DictionaryType.CATEGORY);
         return filmRepository.findFilmsByCategory(category)
                         .stream()
                         .map(f -> mapper.map(f, FilmDto.class))
@@ -121,7 +122,7 @@ public class FilmService {
             film.setBudget(request.getBudget());
         }
         if (request.getCategoryId() != null) {
-            Category category = categoryService.findCategoryById(request.getCategoryId());
+            Category category = categoryService.findById(request.getCategoryId(), DictionaryType.CATEGORY);
             film.setCategory(category);
         }
         if (request.getDirectorId() != null) {
