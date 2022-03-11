@@ -52,7 +52,7 @@ public class FilmService {
 
         if (request.getDirectorId() == null)
             throw new PersonNotExistsException();
-        Person person = personService.findDirectorById(request.getDirectorId());
+        Person person = personService.findPersonById(request.getDirectorId());
 
         Film filmToSave = mapper.map(request, Film.class);
         filmToSave.setCategory(category);

@@ -1,13 +1,12 @@
 package com.filmapp.person;
 
 import com.filmapp.commons.exception.NotExistException;
+import com.filmapp.dictionary.DictionaryType;
 import com.filmapp.person.exception.PersonNotExistsException;
 import com.filmapp.person.payload.CreatePersonRequest;
 import com.filmapp.person.payload.UpdatePersonRequest;
 import com.filmapp.role.person.PersonRole;
-import com.filmapp.role.person.PersonRoleEnum;
 import com.filmapp.role.person.PersonRoleService;
-import com.filmapp.role.person.exception.PersonRoleNotExistException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +27,8 @@ public class PersonService {
         this.mapper = new ModelMapper();
     }
 
-    public PersonDto createPerson(CreatePersonRequest request) throws PersonRoleNotExistException {
-        PersonRole personRole = personRoleService.findPersonRoleById(request.getRoleId());
+    public PersonDto createPerson(CreatePersonRequest request) throws NotExistException {
+        PersonRole personRole = personRoleService.findById(request.getRoleId(), DictionaryType.PERSON_ROLE);
         Person person = mapper.map(request, Person.class);
         person.setPersonRole(personRole);
         Person savedPerson = personRepository.save(person);
@@ -53,7 +52,7 @@ public class PersonService {
             person.setBirthDate(request.getBirthDate());
         }
         if (request.getRoleId() != null) {
-            PersonRole personRole = personRoleService.findPersonRoleById(request.getRoleId());
+            PersonRole personRole = personRoleService.findById(request.getRoleId(), DictionaryType.PERSON_ROLE);
             person.setPersonRole(personRole);
         }
 
@@ -72,19 +71,12 @@ public class PersonService {
         return person.get();
     }
 
-    public List<PersonDto> findPersonsByRoleId(Long roleId) throws PersonRoleNotExistException {
-        PersonRole personRole = personRoleService.findPersonRoleById(roleId);
+    public List<PersonDto> findPersonsByRoleId(Long roleId) throws NotExistException {
+        PersonRole personRole = personRoleService.findById(roleId, DictionaryType.PERSON_ROLE);
         return personRepository.findPeopleByPersonRole(personRole)
                 .stream()
                 .map(p -> mapper.map(p, PersonDto.class))
                 .collect(Collectors.toList());
-    }
-
-    public Person findDirectorById(Long id) throws PersonNotExistsException {
-        Optional<Person> person = personRepository.findPersonByIdAndPersonRole_Name(id, PersonRoleEnum.DIRECTOR);
-        if (person.isEmpty())
-            throw new PersonNotExistsException();
-        return person.get();
     }
 
     public List<PersonDto> getAllPersons() {

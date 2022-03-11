@@ -5,13 +5,11 @@ import com.filmapp.dictionary.exceptions.DictionaryNotExistException;
 import com.filmapp.dictionary.exceptions.DuplicatedDictionaryNameException;
 import com.filmapp.dictionary.exceptions.NotExistedIdException;
 import com.filmapp.dictionary.exceptions.NotProvidedIdException;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
-public class DictionaryService<T extends Dictionary> {
+public abstract class DictionaryService<T extends Dictionary> {
 
     private final DictionaryRepository<T> dictionaryRepository;
 
@@ -20,7 +18,7 @@ public class DictionaryService<T extends Dictionary> {
     }
 
     public List<T> getAll() {
-        return dictionaryRepository.findAll();
+        return dictionaryRepository.findByOrderByIdAsc();
     }
 
     public T save(T dictionary) throws DuplicatedDictionaryNameException {
