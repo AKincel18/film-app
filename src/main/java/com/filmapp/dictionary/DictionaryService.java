@@ -18,7 +18,7 @@ public abstract class DictionaryService<T extends Dictionary> {
     }
 
     public List<T> getAll() {
-        return dictionaryRepository.findByOrderByIdAsc();
+        return dictionaryRepository.findByOrderByNameAsc();
     }
 
     public T save(T dictionary) throws DuplicatedDictionaryNameException {

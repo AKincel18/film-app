@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @NoRepositoryBean
 public interface DictionaryRepository<T extends Dictionary> extends JpaRepository<T, Long> {
-    List<T> findByOrderByIdAsc();
+    List<T> findByOrderByNameAsc();
     Optional<T> findByName(String name);
     boolean existsByName(String name);
 }
