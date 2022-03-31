@@ -1,0 +1,1 @@
+create sequence if not exists DICTIONARIES_SEQ increment by 1 start 1;

@@ -5,11 +5,13 @@ import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.modelmapper.TypeMap;
+import org.modelmapper.convention.MatchingStrategies;
 
 public class FilmMapper extends ModelMapper {
 
     public FilmMapper() {
         super();
+        getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
     }
 
     public <D> D map(Category category, Object source, Class<D> destinationType) {

@@ -1,7 +1,7 @@
 package com.filmapp.person;
 
 import com.filmapp.film.Film;
-import com.filmapp.role.person.PersonRoleDto;
+import com.filmapp.role.person.PersonRole;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,7 +22,7 @@ public class PersonDto {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthDate;
 
-    private PersonRoleDto personRole;
+    private PersonRole personRole;
 
     private List<Film> films;
 }

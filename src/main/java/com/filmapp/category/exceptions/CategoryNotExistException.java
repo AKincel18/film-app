@@ -1,4 +1,4 @@
-package com.filmapp.category.exception;
+package com.filmapp.category.exceptions;
 
 import com.filmapp.commons.exception.NotExistException;
 

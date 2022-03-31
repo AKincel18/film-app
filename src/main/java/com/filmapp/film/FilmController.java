@@ -1,6 +1,5 @@
 package com.filmapp.film;
 
-import com.filmapp.category.exception.CategoryNotExistException;
 import com.filmapp.commons.exception.NotExistException;
 import com.filmapp.commons.exception.processing.MyExceptionProcessing;
 import com.filmapp.film.exception.FilmNotExistException;
@@ -50,7 +49,7 @@ public class FilmController {
     }
 
     @GetMapping("/category/{id}")
-    ResponseEntity<?> findFilmsByCategory(@PathVariable("id") Long categoryId) throws CategoryNotExistException {
+    ResponseEntity<?> findFilmsByCategory(@PathVariable("id") Long categoryId) throws NotExistException {
         List<FilmDto> films = filmService.findFilmsByCategory(categoryId);
         return ResponseEntity.ok().body(films);
     }

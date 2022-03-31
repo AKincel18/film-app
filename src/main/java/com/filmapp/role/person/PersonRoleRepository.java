@@ -1,9 +1,9 @@
 package com.filmapp.role.person;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.filmapp.dictionary.DictionaryRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PersonRoleRepository extends JpaRepository<PersonRole, Long> {
-    boolean existsByName(PersonRoleEnum name);
+public interface PersonRoleRepository extends DictionaryRepository<PersonRole> {
+    PersonRole findPersonRoleByNameEquals(String director);
 }

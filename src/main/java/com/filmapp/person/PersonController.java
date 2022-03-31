@@ -5,7 +5,6 @@ import com.filmapp.commons.exception.processing.MyExceptionProcessing;
 import com.filmapp.person.exception.PersonNotExistsException;
 import com.filmapp.person.payload.CreatePersonRequest;
 import com.filmapp.person.payload.UpdatePersonRequest;
-import com.filmapp.role.person.exception.PersonRoleNotExistException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +25,7 @@ public class PersonController {
 
     @PostMapping
     //@PreAuthorize("hasRole('ROLE_MODERATOR')")
-    ResponseEntity<?> createPerson(@RequestBody @Valid CreatePersonRequest request) throws PersonRoleNotExistException {
+    ResponseEntity<?> createPerson(@RequestBody @Valid CreatePersonRequest request) throws NotExistException {
         PersonDto savedPersonDto = personService.createPerson(request);
         return ResponseEntity.created(URI.create("/" + savedPersonDto.getId())).body(savedPersonDto);
     }
@@ -50,7 +49,7 @@ public class PersonController {
     }
 
     @GetMapping("/role/{id}")
-    ResponseEntity<?> getByRole(@PathVariable Long id) throws PersonRoleNotExistException {
+    ResponseEntity<?> getByRole(@PathVariable Long id) throws NotExistException {
         List<PersonDto> persons = personService.findPersonsByRoleId(id);
         return ResponseEntity.ok(persons);
     }

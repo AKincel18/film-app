@@ -1,13 +1,13 @@
-insert into categories (id, name) values (nextval('CATEGORIES_SEQ'), 'COMEDY');
-insert into categories (id, name) values (nextval('CATEGORIES_SEQ'), 'THRILLER');
-insert into categories (id, name) values (nextval('CATEGORIES_SEQ'), 'FANTASY');
-insert into categories (id, name) values (nextval('CATEGORIES_SEQ'), 'ACTION');
-insert into categories (id, name) values (nextval('CATEGORIES_SEQ'), 'ROMANCE');
-insert into categories (id, name) values (nextval('CATEGORIES_SEQ'), 'WESTERN');
+insert into categories (id, name) values (nextval('DICTIONARIES_SEQ'), 'Comedy');
+insert into categories (id, name) values (nextval('DICTIONARIES_SEQ'), 'Thriller');
+insert into categories (id, name) values (nextval('DICTIONARIES_SEQ'), 'Fantasy');
+insert into categories (id, name) values (nextval('DICTIONARIES_SEQ'), 'Action');
+insert into categories (id, name) values (nextval('DICTIONARIES_SEQ'), 'Romance');
+insert into categories (id, name) values (nextval('DICTIONARIES_SEQ'), 'Western');
 
-insert into person_roles (id, name) values (nextval('PERSON_ROLES_SEQ'), 'ACTOR');
-insert into person_roles (id, name) values (nextval('PERSON_ROLES_SEQ'), 'DIRECTOR');
+insert into person_roles (id, name) values (nextval('DICTIONARIES_SEQ'), 'Actor');
+insert into person_roles (id, name) values (nextval('DICTIONARIES_SEQ'), 'Director');
 
-insert into user_roles (id, name) values (nextval('USER_ROLES_SEQ'), 'ROLE_ADMIN');
-insert into user_roles (id, name) values (nextval('USER_ROLES_SEQ'), 'ROLE_USER');
-insert into user_roles (id, name) values (nextval('USER_ROLES_SEQ'), 'ROLE_MODERATOR');
+insert into user_roles (id, name) values (nextval('DICTIONARIES_SEQ'), 'ROLE_ADMIN');
+insert into user_roles (id, name) values (nextval('DICTIONARIES_SEQ'), 'ROLE_USER');
+insert into user_roles (id, name) values (nextval('DICTIONARIES_SEQ'), 'ROLE_MODERATOR');
