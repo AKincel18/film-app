@@ -1,5 +1,7 @@
 package com.filmapp.dictionary;
 
+import com.filmapp.commons.pagination.PaginationResponseEntity;
+import com.filmapp.commons.pagination.PaginationResult;
 import com.filmapp.dictionary.exceptions.DuplicatedDictionaryNameException;
 import com.filmapp.dictionary.exceptions.NotExistedIdException;
 import com.filmapp.dictionary.exceptions.NotProvidedIdException;
@@ -20,8 +22,10 @@ public class DictionaryController<T extends Dictionary> {
 
     @GetMapping
     //@PreAuthorize("hasAnyRole({'ROLE_ADMIN', 'ROLE_MODERATOR'})")
-    public ResponseEntity<List<T>> getAll() {
-        return ResponseEntity.ok(dictionaryService.getAll());
+    public ResponseEntity<List<T>> getAll(@RequestParam("pageSize") int pageSize,
+                                          @RequestParam("pageIndex") int pageIndex) {
+        PaginationResult<T> result = dictionaryService.getAll(pageSize, pageIndex);
+        return PaginationResponseEntity.ok(result);
     }
 
     @PostMapping
@@ -43,6 +47,6 @@ public class DictionaryController<T extends Dictionary> {
     //@PreAuthorize("hasRole('ROLE_MODERATOR')")
     public ResponseEntity<List<?>> delete(@PathVariable Long id) {
         boolean isDeleted = dictionaryService.delete(id);
-        return isDeleted ? ResponseEntity.ok().body(dictionaryService.getAll()) : ResponseEntity.notFound().build();
+        return isDeleted ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 }
