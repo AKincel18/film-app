@@ -22,9 +22,9 @@ public class DictionaryController<T extends Dictionary> {
 
     @GetMapping
     //@PreAuthorize("hasAnyRole({'ROLE_ADMIN', 'ROLE_MODERATOR'})")
-    public ResponseEntity<List<T>> getAll(@RequestParam("pageSize") int pageSize,
-                                          @RequestParam("pageIndex") int pageIndex) {
-        PaginationResult<T> result = dictionaryService.getAll(pageSize, pageIndex);
+    public ResponseEntity<List<T>> getPaginatedDirectories(@RequestParam("pageSize") int pageSize,
+                                                           @RequestParam("pageIndex") int pageIndex) {
+        PaginationResult<T> result = dictionaryService.getPaginatedDirectories(pageSize, pageIndex);
         return PaginationResponseEntity.ok(result);
     }
 

@@ -21,7 +21,7 @@ public abstract class DictionaryService<T extends Dictionary> {
         this.dictionaryRepository = dictionaryRepository;
     }
 
-    public PaginationResult<T> getAll(int pageSize, int pageIndex) {
+    public PaginationResult<T> getPaginatedDirectories(int pageSize, int pageIndex) {
         Sort orderByNameAsc = Sort.by(Sort.Order.asc("name"));
         PageRequest pageRequest = PageRequest.of(pageIndex, pageSize, orderByNameAsc);
         List<T> directories = dictionaryRepository.findAll(pageRequest)
