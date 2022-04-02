@@ -20,6 +20,12 @@ public class DictionaryController<T extends Dictionary> {
         this.dictionaryService = dictionaryService;
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<T>> getAll() {
+        List<T> directories = dictionaryService.getAllByName();
+        return ResponseEntity.ok(directories);
+    }
+
     @GetMapping
     //@PreAuthorize("hasAnyRole({'ROLE_ADMIN', 'ROLE_MODERATOR'})")
     public ResponseEntity<List<T>> getPaginatedDirectories(@RequestParam("pageSize") int pageSize,

@@ -21,6 +21,10 @@ public abstract class DictionaryService<T extends Dictionary> {
         this.dictionaryRepository = dictionaryRepository;
     }
 
+    public List<T> getAllByName() {
+        return dictionaryRepository.findByOrderByNameAsc();
+    }
+
     public PaginationResult<T> getPaginatedDirectories(int pageSize, int pageIndex) {
         Sort orderByNameAsc = Sort.by(Sort.Order.asc("name"));
         PageRequest pageRequest = PageRequest.of(pageIndex, pageSize, orderByNameAsc);
