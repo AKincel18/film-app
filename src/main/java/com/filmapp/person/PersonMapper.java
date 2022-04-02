@@ -5,11 +5,13 @@ import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.modelmapper.TypeMap;
+import org.modelmapper.convention.MatchingStrategies;
 
 public class PersonMapper extends ModelMapper {
 
     public PersonMapper() {
         super();
+        getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
     }
 
     public <D> D map(PersonRole role, Object source, Class<D> destinationType) {
