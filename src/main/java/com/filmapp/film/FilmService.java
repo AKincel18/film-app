@@ -4,6 +4,7 @@ import com.filmapp.category.Category;
 import com.filmapp.category.CategoryService;
 import com.filmapp.category.exceptions.CategoryNotExistException;
 import com.filmapp.commons.exception.NotExistException;
+import com.filmapp.commons.pagination.PaginationResult;
 import com.filmapp.dictionary.DictionaryType;
 import com.filmapp.film.exception.FilmNotExistException;
 import com.filmapp.film.payload.CreateFilmRequest;
@@ -11,7 +12,8 @@ import com.filmapp.film.payload.UpdateFilmRequest;
 import com.filmapp.person.Person;
 import com.filmapp.person.PersonService;
 import com.filmapp.person.exception.PersonNotExistsException;
-import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -36,11 +38,15 @@ public class FilmService {
         this.mapper = new FilmMapper();
     }
 
-    public List<FilmDto> getAllFilms() {
-        return filmRepository.findAll()
+    public PaginationResult<FilmDto> getPaginatedFilms(int pageSize, int pageIndex) {
+        Sort orderByNameAsc = Sort.by(Sort.Order.asc("name"));
+        PageRequest pageRequest = PageRequest.of(pageIndex, pageSize, orderByNameAsc);
+        List<FilmDto> films = filmRepository.findAll(pageRequest)
                 .stream()
                 .map(f -> mapper.map(f.getCategory(), f, FilmDto.class))
                 .collect(Collectors.toList());
+        long sizeAll = filmRepository.findAll().size();
+        return new PaginationResult<>(films, sizeAll);
     }
 
     public FilmDto createFilm(CreateFilmRequest request) throws NotExistException {

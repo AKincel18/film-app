@@ -2,6 +2,8 @@ package com.filmapp.film;
 
 import com.filmapp.commons.exception.NotExistException;
 import com.filmapp.commons.exception.processing.MyExceptionProcessing;
+import com.filmapp.commons.pagination.PaginationResponseEntity;
+import com.filmapp.commons.pagination.PaginationResult;
 import com.filmapp.film.exception.FilmNotExistException;
 import com.filmapp.film.payload.CreateFilmRequest;
 import com.filmapp.film.payload.UpdateFilmRequest;
@@ -26,8 +28,10 @@ public class FilmController {
     }
 
     @GetMapping
-    ResponseEntity<List<FilmDto>> findAllFilms() {
-        return ResponseEntity.ok(filmService.getAllFilms());
+    ResponseEntity<List<FilmDto>> getPaginatedFilms(@RequestParam("pageSize") int pageSize,
+                                                    @RequestParam("pageIndex") int pageIndex) {
+        PaginationResult<FilmDto> result = filmService.getPaginatedFilms(pageSize, pageIndex);
+        return PaginationResponseEntity.ok(result);
     }
 
     @PostMapping
@@ -77,6 +81,6 @@ public class FilmController {
     @DeleteMapping("/{id}")
     ResponseEntity<?> deleteFilm(@PathVariable Long id) throws FilmNotExistException {
         filmService.deleteFilm(id);
-        return findAllFilms();
+        return ResponseEntity.ok().build();
     }
 }
