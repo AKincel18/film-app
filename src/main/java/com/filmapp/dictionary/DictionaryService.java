@@ -1,13 +1,17 @@
 package com.filmapp.dictionary;
 
 import com.filmapp.commons.exception.NotExistException;
+import com.filmapp.commons.pagination.PaginationResult;
 import com.filmapp.dictionary.exceptions.DictionaryNotExistException;
 import com.filmapp.dictionary.exceptions.DuplicatedDictionaryNameException;
 import com.filmapp.dictionary.exceptions.NotExistedIdException;
 import com.filmapp.dictionary.exceptions.NotProvidedIdException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public abstract class DictionaryService<T extends Dictionary> {
 
@@ -17,8 +21,18 @@ public abstract class DictionaryService<T extends Dictionary> {
         this.dictionaryRepository = dictionaryRepository;
     }
 
-    public List<T> getAll() {
+    public List<T> getAllByName() {
         return dictionaryRepository.findByOrderByNameAsc();
+    }
+
+    public PaginationResult<T> getPaginatedDirectories(int pageSize, int pageIndex) {
+        Sort orderByNameAsc = Sort.by(Sort.Order.asc("name"));
+        PageRequest pageRequest = PageRequest.of(pageIndex, pageSize, orderByNameAsc);
+        List<T> directories = dictionaryRepository.findAll(pageRequest)
+                .stream()
+                .collect(Collectors.toList());
+        long sizeAll = dictionaryRepository.findAll().size();
+        return new PaginationResult<>(directories, sizeAll);
     }
 
     public T save(T dictionary) throws DuplicatedDictionaryNameException {

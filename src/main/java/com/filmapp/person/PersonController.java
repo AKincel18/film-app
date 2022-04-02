@@ -2,6 +2,8 @@ package com.filmapp.person;
 
 import com.filmapp.commons.exception.NotExistException;
 import com.filmapp.commons.exception.processing.MyExceptionProcessing;
+import com.filmapp.commons.pagination.PaginationResponseEntity;
+import com.filmapp.commons.pagination.PaginationResult;
 import com.filmapp.person.exception.PersonNotExistsException;
 import com.filmapp.person.payload.CreatePersonRequest;
 import com.filmapp.person.payload.UpdatePersonRequest;
@@ -38,8 +40,10 @@ public class PersonController {
     }
 
     @GetMapping
-    ResponseEntity<?> getAllPersons() {
-        return ResponseEntity.ok(personService.getAllPersons());
+    ResponseEntity<?> getPaginatedPersons(@RequestParam("pageSize") int pageSize,
+                                          @RequestParam("pageIndex") int pageIndex) {
+        PaginationResult<PersonDto> result = personService.getPaginatedPersons(pageSize, pageIndex);
+        return PaginationResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")
@@ -57,7 +61,7 @@ public class PersonController {
     @DeleteMapping("/{id}")
     ResponseEntity<?> deletePerson(@PathVariable Long id) throws PersonNotExistsException {
         personService.deletePerson(id);
-        return getAllPersons();
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/directors")

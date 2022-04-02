@@ -15,8 +15,8 @@ import java.util.Set;
 public class Film {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FILMS_GEN_SEQ")
+    @SequenceGenerator(name = "FILMS_GEN_SEQ", sequenceName = "FILMS_SEQ", allocationSize = 1)
     private Long id;
 
     @Column
