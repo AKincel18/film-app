@@ -3,10 +3,11 @@ package com.filmapp.film;
 import com.filmapp.commons.exception.NotExistException;
 import com.filmapp.commons.exception.processing.MyExceptionProcessing;
 import com.filmapp.commons.pagination.PaginationResponseEntity;
-import com.filmapp.commons.pagination.PaginationResult;
 import com.filmapp.film.exception.FilmNotExistException;
 import com.filmapp.film.payload.CreateFilmRequest;
 import com.filmapp.film.payload.UpdateFilmRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,9 +29,8 @@ public class FilmController {
     }
 
     @GetMapping
-    ResponseEntity<List<FilmDto>> getPaginatedFilms(@RequestParam("pageSize") int pageSize,
-                                                    @RequestParam("pageIndex") int pageIndex) {
-        PaginationResult<FilmDto> result = filmService.getPaginatedFilms(pageSize, pageIndex);
+    ResponseEntity<List<FilmDto>> getPaginatedFilms(Pageable pageable) {
+        Page<FilmDto> result = filmService.getPaginatedFilms(pageable);
         return PaginationResponseEntity.ok(result);
     }
 
