@@ -3,10 +3,11 @@ package com.filmapp.person;
 import com.filmapp.commons.exception.NotExistException;
 import com.filmapp.commons.exception.processing.MyExceptionProcessing;
 import com.filmapp.commons.pagination.PaginationResponseEntity;
-import com.filmapp.commons.pagination.PaginationResult;
 import com.filmapp.person.exception.PersonNotExistsException;
 import com.filmapp.person.payload.CreatePersonRequest;
 import com.filmapp.person.payload.UpdatePersonRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,9 +41,8 @@ public class PersonController {
     }
 
     @GetMapping
-    ResponseEntity<?> getPaginatedPersons(@RequestParam("pageSize") int pageSize,
-                                          @RequestParam("pageIndex") int pageIndex) {
-        PaginationResult<PersonDto> result = personService.getPaginatedPersons(pageSize, pageIndex);
+    ResponseEntity<?> getPaginatedPersons(Pageable pageable) {
+        Page<PersonDto> result = personService.getPaginatedPersons(pageable);
         return PaginationResponseEntity.ok(result);
     }
 

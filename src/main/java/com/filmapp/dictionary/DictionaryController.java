@@ -1,10 +1,11 @@
 package com.filmapp.dictionary;
 
 import com.filmapp.commons.pagination.PaginationResponseEntity;
-import com.filmapp.commons.pagination.PaginationResult;
 import com.filmapp.dictionary.exceptions.DuplicatedDictionaryNameException;
 import com.filmapp.dictionary.exceptions.NotExistedIdException;
 import com.filmapp.dictionary.exceptions.NotProvidedIdException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,17 +21,10 @@ public class DictionaryController<T extends Dictionary> {
         this.dictionaryService = dictionaryService;
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<T>> getAll() {
-        List<T> directories = dictionaryService.getAllByName();
-        return ResponseEntity.ok(directories);
-    }
-
     @GetMapping
     //@PreAuthorize("hasAnyRole({'ROLE_ADMIN', 'ROLE_MODERATOR'})")
-    public ResponseEntity<List<T>> getPaginatedDirectories(@RequestParam("pageSize") int pageSize,
-                                                           @RequestParam("pageIndex") int pageIndex) {
-        PaginationResult<T> result = dictionaryService.getPaginatedDirectories(pageSize, pageIndex);
+    public ResponseEntity<List<T>> getPaginatedDirectories(Pageable pageable) {
+        Page<T> result = dictionaryService.findAll(pageable);
         return PaginationResponseEntity.ok(result);
     }
 

@@ -1,7 +1,6 @@
 package com.filmapp.person;
 
 import com.filmapp.commons.exception.NotExistException;
-import com.filmapp.commons.pagination.PaginationResult;
 import com.filmapp.dictionary.DictionaryType;
 import com.filmapp.person.exception.PersonNotExistsException;
 import com.filmapp.person.payload.CreatePersonRequest;
@@ -9,8 +8,8 @@ import com.filmapp.person.payload.UpdatePersonRequest;
 import com.filmapp.role.person.PersonRole;
 import com.filmapp.role.person.PersonRoleRepository;
 import com.filmapp.role.person.PersonRoleService;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -85,15 +84,8 @@ public class PersonService {
                 .collect(Collectors.toList());
     }
 
-    public PaginationResult<PersonDto> getPaginatedPersons(int pageSize, int pageIndex) {
-        Sort orderByLastFirstNameAsc = Sort.by(Sort.Order.asc("lastName"), Sort.Order.asc("firstName"));
-        PageRequest pageRequest = PageRequest.of(pageIndex, pageSize, orderByLastFirstNameAsc);
-        List<PersonDto> persons = personRepository.findAll(pageRequest)
-                .stream()
-                .map(p -> mapper.map(p.getPersonRole(), p, PersonDto.class))
-                .collect(Collectors.toList());
-        long sizeAll = personRepository.findAll().size();
-        return new PaginationResult<>(persons, sizeAll);
+    public Page<PersonDto> getPaginatedPersons(Pageable pageable) {
+        return personRepository.findAll(pageable).map(p -> mapper.map(p.getPersonRole(), p, PersonDto.class));
     }
 
     public void deletePerson(Long id) throws PersonNotExistsException {
