@@ -1,6 +1,7 @@
 package com.filmapp.dictionary;
 
 import com.filmapp.commons.pagination.PaginationResponseEntity;
+import com.filmapp.dictionary.aspect.LoggerUpdateDirectory;
 import com.filmapp.dictionary.exceptions.DuplicatedDictionaryNameException;
 import com.filmapp.dictionary.exceptions.NotExistedIdException;
 import com.filmapp.dictionary.exceptions.NotProvidedIdException;
@@ -36,6 +37,7 @@ public class DictionaryController<T extends Dictionary> {
     }
 
     @PutMapping
+    @LoggerUpdateDirectory
     //@PreAuthorize("hasRole('ROLE_MODERATOR')")
     public ResponseEntity<?> update(@RequestBody @Valid T request)
             throws DuplicatedDictionaryNameException, NotProvidedIdException, NotExistedIdException {
