@@ -30,11 +30,12 @@ public class FilmService {
     private final PersonService personService;
     private final FilmMapper mapper;
 
-    public FilmService(FilmRepository filmRepository, CategoryService categoryRepository, PersonService personService) {
+    public FilmService(FilmRepository filmRepository, CategoryService categoryRepository,
+                       PersonService personService, FilmMapper mapper) {
         this.filmRepository = filmRepository;
         this.categoryService = categoryRepository;
         this.personService = personService;
-        this.mapper = new FilmMapper();
+        this.mapper = mapper;
     }
 
     public Page<FilmDto> getPaginatedFilms(Pageable pageable) {

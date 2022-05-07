@@ -6,7 +6,6 @@ import com.filmapp.person.exception.PersonNotExistsException;
 import com.filmapp.person.payload.CreatePersonRequest;
 import com.filmapp.person.payload.UpdatePersonRequest;
 import com.filmapp.role.person.PersonRole;
-import com.filmapp.role.person.PersonRoleRepository;
 import com.filmapp.role.person.PersonRoleService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,15 +20,13 @@ public class PersonService {
 
     private final PersonRepository personRepository;
     private final PersonRoleService personRoleService;
-    private final PersonRoleRepository personRoleRepository;
     private final PersonMapper mapper;
 
     public PersonService(PersonRepository personRepository, PersonRoleService personRoleService,
-                         PersonRoleRepository personRoleRepository) {
+                         PersonMapper mapper) {
         this.personRepository = personRepository;
         this.personRoleService = personRoleService;
-        this.personRoleRepository = personRoleRepository;
-        this.mapper = new PersonMapper();
+        this.mapper = mapper;
     }
 
     public PersonDto createPerson(CreatePersonRequest request) throws NotExistException {
@@ -68,7 +65,7 @@ public class PersonService {
         return mapper.map(findPersonById(id), PersonDto.class);
     }
 
-    public Person findPersonById(Long id) throws PersonNotExistsException{
+    public Person findPersonById(Long id) throws PersonNotExistsException {
         Optional<Person> person = personRepository.findById(id);
         if (person.isEmpty()) {
             throw new PersonNotExistsException();
@@ -94,8 +91,7 @@ public class PersonService {
     }
 
     public List<PersonDto> getAllDirectors() {
-        PersonRole directors = personRoleRepository.findPersonRoleByNameEquals("Director");
-        return personRepository.findPeopleByPersonRoleOrderByLastNameAscFirstName(directors)
+        return personRepository.findAllDirectors()
                 .stream()
                 .map(p -> mapper.map(p, PersonDto.class))
                 .collect(Collectors.toList());
