@@ -2,10 +2,12 @@ package com.filmapp.dictionary;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+@SuperBuilder
 @Data
 @NoArgsConstructor
 @MappedSuperclass
